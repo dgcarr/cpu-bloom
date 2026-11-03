@@ -82,7 +82,7 @@ The snap is strictly confined. It needs `hardware-observe` to read the temperatu
 
 ### Install from a package
 
-Release packages install under `/usr` for every account on the computer, and pull in what they need:
+Download a package from the [latest release](https://github.com/dgcarr/cpu-bloom/releases/latest). Release packages install under `/usr` for every account on the computer, and pull in what they need:
 
 ```bash
 sudo apt install ./cpu-bloom_0.1.0-1_amd64.deb                     # Debian, Ubuntu, Mint, Pop!_OS
@@ -92,7 +92,7 @@ sudo pacman -U ./cpu-bloom-0.1.0-1-x86_64.pkg.tar.zst               # Arch, Manj
 
 The tray libraries are only recommended, not required: without them you get the window and overlay but no tray icon. The `.deb` and `.rpm` install them by default. On Arch, install them yourself with `sudo pacman -S gjs libayatana-appindicator`.
 
-On other distributions, unpack the release tarball and run `./install.sh --no-build`, which installs for your user only. To install for everyone instead, run `sudo ./install.sh --no-build --prefix=/usr/local`.
+On other distributions, unpack the release tarball (`cpu-bloom-0.1.0-linux-x86_64.tar.gz`) and run `./install.sh --no-build`, which installs for your user only. To install for everyone instead, run `sudo ./install.sh --no-build --prefix=/usr/local`.
 
 ### Install from source
 
