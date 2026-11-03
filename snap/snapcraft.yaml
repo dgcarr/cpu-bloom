@@ -1,0 +1,80 @@
+# Snap of CPU Bloom. Processing only runs on the host, so export first and
+# then pack; the app part dumps the export from out/:
+#
+#   scripts/build-export.sh && snapcraft pack
+#
+# The export bundles an x86_64 Java runtime, so this builds for amd64 only.
+name: cpu-bloom
+title: CPU Bloom
+base: core26
+version: '0.1.0'
+summary: Live system monitor that draws your CPU as a glowing flower
+description: |
+  CPU Bloom draws your CPU as a glowing flower: one petal per CPU thread,
+  growing and brightening with its load, with RAM, temperature and load
+  average around it.
+
+  Open the full window, or a small always-on-top overlay. On desktops with a
+  system tray (or GNOME with the AppIndicator extension) a top-bar indicator
+  shows the average load and opens and closes the window, and can start
+  CPU Bloom at login.
+
+  Other looks are available as themes: a 3D ridge landscape, and a
+  photorealistic poppy lit by your CPU temperature.
+
+  For CPU temperatures, allow hardware access:
+  snap connect cpu-bloom:hardware-observe
+license: MIT
+website: https://github.com/dgcarr/cpu-bloom
+source-code: https://github.com/dgcarr/cpu-bloom
+issues: https://github.com/dgcarr/cpu-bloom/issues
+contact: https://github.com/dgcarr/cpu-bloom/issues
+icon: icons/cpu-bloom.svg
+grade: stable
+confinement: strict
+
+platforms:
+  amd64:
+
+# The bundled Java runtime loads these itself, so the linter sees them unused.
+lint:
+  ignore:
+    - library:
+        - lib/cpu-bloom/app/java/lib/*.so
+
+apps:
+  cpu-bloom:
+    command: bin/cpu-bloom
+    extensions: [gnome]
+    common-id: io.github.cpubloom.CpuBloom
+    autostart: cpu-bloom.desktop
+    environment:
+      CPU_BLOOM_HOME: $SNAP/lib/cpu-bloom
+      # gjs looks for its own GjsPrivate typelib where the host would have it.
+      GI_TYPELIB_PATH: $SNAP/gnome-platform/usr/lib/$CRAFT_ARCH_TRIPLET_BUILD_FOR/gjs/girepository-1.0
+    plugs:
+      - home
+      - unity7
+      - hardware-observe
+
+parts:
+  app:
+    plugin: nil
+    source: out
+    # Not organize: the export has its own lib/, which would collide.
+    override-build: |
+      mkdir -p "$CRAFT_PART_INSTALL/lib/cpu-bloom"
+      cp -a . "$CRAFT_PART_INSTALL/lib/cpu-bloom/app"
+
+  launcher:
+    plugin: dump
+    source: .
+    stage:
+      - bin/cpu-bloom
+      - lib/cpu-bloom/tray.js
+      - usr/share/icons/hicolor/scalable/apps/
+    organize:
+      tray/tray.js: lib/cpu-bloom/tray.js
+      icons/*: usr/share/icons/hicolor/scalable/apps/
+    # gjs, Gtk 3 and the Ayatana indicator come from the gnome extension's
+    # runtime, and the X libraries Java needs from its mesa runtime.

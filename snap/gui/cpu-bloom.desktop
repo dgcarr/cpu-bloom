@@ -1,0 +1,20 @@
+[Desktop Entry]
+Type=Application
+Name=CPU Bloom
+GenericName=System Monitor
+Comment=Live CPU load drawn as a glowing flower
+Exec=cpu-bloom
+Icon=${SNAP}/usr/share/icons/hicolor/scalable/apps/cpu-bloom.svg
+Terminal=false
+Categories=System;Monitor;
+Keywords=cpu;load;monitor;system;overlay;
+StartupWMClass=cpu-bloom
+Actions=overlay;quit;
+
+[Desktop Action overlay]
+Name=Show Overlay
+Exec=cpu-bloom --overlay
+
+[Desktop Action quit]
+Name=Quit CPU Bloom
+Exec=cpu-bloom --quit

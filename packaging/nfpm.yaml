@@ -1,0 +1,58 @@
+# nfpm config for the .deb, .rpm and Arch packages. Run packaging/build.sh,
+# which stages the files under dist/root (paths are relative to the repo)
+# and sets NFPM_ARCH, VERSION and MAINTAINER.
+name: cpu-bloom
+arch: ${NFPM_ARCH}
+platform: linux
+version: ${VERSION}
+release: 1
+section: utils
+priority: optional
+maintainer: ${MAINTAINER}
+description: |
+  Live system monitor that draws your CPU as a glowing flower.
+  One petal per CPU thread, with RAM, temperature and GPU, plus an
+  always-on-top overlay and an optional tray indicator. Other looks
+  (a 3D ridge landscape, a photorealistic poppy) are available as themes.
+homepage: https://github.com/dgcarr/cpu-bloom
+license: MIT
+
+contents:
+  - src: dist/root/usr/
+    dst: /usr/
+    type: tree
+  # Where each distribution expects the license.
+  - src: LICENSE
+    dst: /usr/share/doc/cpu-bloom/copyright
+    packager: deb
+  - src: LICENSE
+    dst: /usr/share/licenses/cpu-bloom/LICENSE
+    packager: rpm
+  - src: LICENSE
+    dst: /usr/share/licenses/cpu-bloom/LICENSE
+    packager: archlinux
+
+scripts:
+  postinstall: packaging/postinstall.sh
+  postremove: packaging/postinstall.sh
+
+# The export bundles its own Java runtime; it needs OpenGL and the X
+# libraries Java's AWT and JOGL's X11 window code link against (objdump -p
+# on out/java/lib/libawt_xawt.so and the natives-linux-* jars), and at least
+# one font, or AWT fails to start. The tray is optional: without gjs and
+# Ayatana the launcher just opens the window.
+overrides:
+  deb:
+    depends: [libgl1, libx11-6, libxext6, libxrender1, libxtst6, libxi6, libxrandr2, libxcursor1, libxxf86vm1, fontconfig, fonts-dejavu-core]
+    recommends: [gjs, gir1.2-ayatanaappindicator3-0.1]
+    suggests: [fonts-ubuntu]
+  rpm:
+    depends: [mesa-libGL, libX11, libXext, libXrender, libXtst, libXi, libXrandr, libXcursor, libXxf86vm, fontconfig, dejavu-sans-fonts]
+    recommends: [gjs, libayatana-appindicator-gtk3]
+  archlinux:
+    depends: [libgl, libx11, libxext, libxrender, libxtst, libxi, libxrandr, libxcursor, libxxf86vm, fontconfig, ttf-font]
+    # nfpm can't write optdepends, so the tray libraries (gjs,
+    # libayatana-appindicator) are left to the README.
+
+rpm:
+  group: Applications/System

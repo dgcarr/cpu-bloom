@@ -1,0 +1,47 @@
+#!/bin/sh
+# CPU Bloom launcher. With gjs it starts the top-bar indicator (tray.js), which
+# opens and closes the window; see tray.js for the options. Without gjs it runs
+# the window directly, so CPU Bloom also works where there is no tray.
+#
+#   cpu-bloom [--overlay | --background | --quit] [--theme=<id>]
+#
+# CPU_BLOOM_HOME is where install.sh put app/ and tray.js; by default it is
+# found from this script's location (<prefix>/bin -> <prefix>/lib/cpu-bloom).
+
+if [ -z "$CPU_BLOOM_HOME" ]; then
+  CPU_BLOOM_HOME="$(dirname "$(dirname "$(readlink -f "$0")")")/lib/cpu-bloom"
+fi
+CPU_BLOOM_BIN="$(readlink -f "$0")"
+export CPU_BLOOM_HOME CPU_BLOOM_BIN
+
+if command -v gjs >/dev/null 2>&1; then
+  exec gjs "$CPU_BLOOM_HOME/tray.js" "$@"
+fi
+
+# No gjs: no indicator and no single-instance handling, just the window.
+for arg in "$@"; do
+  case "$arg" in
+    --theme=*)
+      # Remember the theme the way the indicator would (Settings.pde reads it).
+      settings="${XDG_CONFIG_HOME:-$HOME/.config}/cpu-bloom/settings.properties"
+      mkdir -p "$(dirname "$settings")"
+      touch "$settings"
+      grep -v '^theme=' "$settings" > "$settings.tmp"
+      echo "theme=${arg#--theme=}" >> "$settings.tmp"
+      mv "$settings.tmp" "$settings"
+      ;;
+  esac
+done
+for arg in "$@"; do
+  case "$arg" in
+    --quit)
+      pkill -u "$(id -u)" -f "$CPU_BLOOM_HOME/app/" || true
+      exit 0
+      ;;
+    --background)
+      echo "cpu-bloom: gjs is not installed, so there is no indicator to run in the background." >&2
+      exit 0
+      ;;
+  esac
+done
+exec "$CPU_BLOOM_HOME/app/cpu_bloom" "$@"

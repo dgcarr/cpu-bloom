@@ -1,0 +1,6 @@
+out/
+*.class
+poppy/preview/
+__pycache__/
+dist/
+*.snap
