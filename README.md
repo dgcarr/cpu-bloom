@@ -2,6 +2,8 @@
 
 A live system monitor for Linux, written in [Processing](https://processing.org), that draws your CPU as a glowing flower. Other looks are available as themes, and you can write your own in Processing.
 
+[![Get it from the Snap Store](https://snapcraft.io/static/images/badges/en/snap-store-black.svg)](https://snapcraft.io/cpu-bloom)
+
 ![CPU Bloom with three threads at full load](docs/screenshot.png)
 
 ## Themes

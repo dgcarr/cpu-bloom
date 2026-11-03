@@ -10,20 +10,29 @@ base: core26
 version: '0.1.0'
 summary: Live system monitor that draws your CPU as a glowing flower
 description: |
-  CPU Bloom draws your CPU as a glowing flower: one petal per CPU thread,
-  growing and brightening with its load, with RAM, temperature and load
-  average around it.
+  CPU Bloom is a system monitor and CPU monitor for Linux that draws your
+  processor as a glowing flower. Each CPU thread is a petal that grows and
+  brightens with its load, with RAM, CPU temperature and load average
+  around it.
 
-  Open the full window, or a small always-on-top overlay. On desktops with a
-  system tray (or GNOME with the AppIndicator extension) a top-bar indicator
-  shows the average load and opens and closes the window, and can start
-  CPU Bloom at login.
+  **Features**
 
-  Other looks are available as themes: a 3D ridge landscape, and a
-  photorealistic poppy lit by your CPU temperature.
+  * Three themes: Bloom, a 3D Ridge landscape, and a photorealistic Poppy
+    that opens with CPU load and glows with CPU temperature
+  * The full window, or a small always-on-top overlay for a corner of your
+    screen
+  * A tray indicator showing average load, with Start at Login (needs a
+    system tray, or GNOME with the AppIndicator extension)
+  * Light on resources: rendering pauses while the window is hidden
 
-  For CPU temperatures, allow hardware access:
-  snap connect cpu-bloom:hardware-observe
+  **CPU temperatures**
+
+  Allow access to the temperature sensors once after installing:
+
+      sudo snap connect cpu-bloom:hardware-observe
+
+  The snap shows no GPU stats, because it can't run nvidia-smi from inside
+  its sandbox.
 license: MIT
 website: https://github.com/dgcarr/cpu-bloom
 source-code: https://github.com/dgcarr/cpu-bloom
