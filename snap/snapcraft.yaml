@@ -7,7 +7,7 @@
 name: cpu-bloom
 title: CPU Bloom
 base: core26
-version: '0.1.0'
+version: '0.2.0'
 summary: Live system monitor that draws your CPU as a glowing flower
 description: |
   CPU Bloom is a system monitor and CPU monitor for Linux that draws your
