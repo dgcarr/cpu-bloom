@@ -13,10 +13,13 @@ A live system monitor for Linux, written in [Processing](https://processing.org)
 | **Bloom** (default) | The flower described below. |
 | **Ridge** | A 3D landscape with one mountain ridge per thread. The front edge is live, and the last ~15 s scroll back into the fog. A translucent sea rises with RAM use. |
 | **Poppy** | A photorealistic poppy that opens with average CPU load. At idle it is a closed bud; at 100% it is in full bloom and has turned to face you. The backlight brightens as the CPU warms up. Its frames are pre-rendered in Blender (see [THEMES.md](THEMES.md#pre-rendered-themes)). |
+| **Orchid** | A photorealistic moth orchid that opens with average CPU load, like Poppy. At idle it is a closed bud hanging from its stalk; as the load rises it turns towards you and opens, and at 100% it is in full bloom. The backlight follows CPU temperature, so the petals glow as the CPU warms up. Its frames are also pre-rendered in Blender. |
 
 ![The Ridge theme](docs/ridge.png)
 
 ![The Poppy theme as a bud, half open and in full bloom](docs/poppy.png)
+
+![The Orchid theme as a bud, half open and in full bloom](docs/orchid.png)
 
 To switch themes, press **N** in the window, pick one from **Theme** in the top-bar menu, or run `cpu-bloom --theme=ridge`. The choice is remembered and also applies to the overlay.
 
@@ -225,8 +228,12 @@ cpu_bloom/
   Bloom.pde          petals, history ring, core orb, RAM/GPU arcs, labels
   ParticleField.pde  particle pool and noise flow field
   RidgeTheme.pde     the Ridge theme: 3D landscape in an offscreen P3D buffer
-  PoppyTheme.pde     the Poppy theme: scrubs pre-rendered frames by CPU load and temperature
+  FrameSequenceTheme.pde  base for pre-rendered themes: scrubs frames by CPU load and temperature
+  FrameCache.pde     on-disk cache of resized frames for FrameSequenceTheme
+  PoppyTheme.pde     the Poppy theme (a FrameSequenceTheme)
+  OrchidTheme.pde    the Orchid theme (a FrameSequenceTheme)
   data/poppy/        the Poppy frames, dim/ and bright/, rendered by poppy/render.sh
+  data/orchid/       the Orchid frames, dim/ and bright/, rendered by orchid/render.sh
   SystemSampler.pde  /proc, /sys and nvidia-smi sampling thread
   Overlay.pde        --overlay mode: borderless, always on top, drag/scroll
   Settings.pde       settings.properties shared with the indicator (on top, theme)
@@ -236,6 +243,9 @@ bin/cpu-bloom        launcher: runs tray.js with gjs, or the window directly wit
 tray/tray.js         tray indicator and window control (gjs, optional AyatanaAppIndicator3)
 poppy/poppy.py       procedural Blender scene for the Poppy frames
 poppy/render.sh      renders the frames (or --preview stills) with Blender
+orchid/orchid.py     procedural Blender scene for the Orchid frames
+orchid/render.sh     renders the frames (or --preview stills) with Blender
+blender/common.py    helpers shared by both scenes: render, relighting, lights, meshes
 icons/               app icon and symbolic tray icon
 scripts/build-export.sh  Processing export, patched and trimmed for installing
 install.sh           install / uninstall under a prefix (default ~/.local)

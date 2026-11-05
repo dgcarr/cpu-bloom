@@ -4,3 +4,4 @@ poppy/preview/
 __pycache__/
 dist/
 *.snap
+orchid/preview/

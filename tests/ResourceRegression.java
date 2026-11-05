@@ -16,7 +16,7 @@ public class ResourceRegression {
   static class BlockingSketch extends cpu_bloom {
     final java.util.concurrent.CountDownLatch entered = new java.util.concurrent.CountDownLatch(1);
     final java.util.concurrent.CountDownLatch release = new java.util.concurrent.CountDownLatch(1);
-    public PImage loadPoppyFrame(String path, int size) {
+    public PImage loadFrameImage(String path, int size) {
       entered.countDown();
       try { release.await(); } catch (InterruptedException e) { Thread.currentThread().interrupt(); }
       return new PImage(4, 4, PConstants.RGB);
@@ -87,17 +87,17 @@ public class ResourceRegression {
     for (int size : new int[] {400, 640, 960}) {
       PImage original = app.loadImage(args[0]);
       original.resize(size, size); original.loadPixels();
-      java.io.File cache = app.poppyCacheFile(new java.io.File(args[0]), size);
+      java.io.File cache = app.frameCacheFile(new java.io.File(args[0]), size);
       Files.deleteIfExists(cache.toPath());
-      PImage cold = app.loadPoppyFrame(args[0], size);
+      PImage cold = app.loadFrameImage(args[0], size);
       int coldDecodes = app.decodes;
-      PImage warm = app.loadPoppyFrame(args[0], size);
+      PImage warm = app.loadFrameImage(args[0], size);
       check(app.decodes == coldDecodes, "warm cache decoded original again");
       cold.loadPixels(); warm.loadPixels();
       check(Arrays.equals(original.pixels, cold.pixels), "cold pixels changed at " + size);
       check(Arrays.equals(original.pixels, warm.pixels), "warm pixels changed at " + size);
       Files.write(cache.toPath(), new byte[] {1, 2, 3});
-      PImage recovered = app.loadPoppyFrame(args[0], size); recovered.loadPixels();
+      PImage recovered = app.loadFrameImage(args[0], size); recovered.loadPixels();
       check(Arrays.equals(original.pixels, recovered.pixels), "corrupt cache recovery");
     }
     System.out.println("PASS: worker suspension/resume/stop, prefetch eviction, reversal, lighting, cleanup, exact cache pixels, corruption recovery");

@@ -17,8 +17,8 @@ description: |
 
   **Features**
 
-  * Three themes: Bloom, a 3D Ridge landscape, and a photorealistic Poppy
-    that opens with CPU load and glows with CPU temperature
+  * Four themes: Bloom, a 3D Ridge landscape, and a photorealistic Poppy
+    and Orchid that open with CPU load and glow with CPU temperature
   * The full window, or a small always-on-top overlay for a corner of your
     screen
   * A tray indicator showing average load, with Start at Login (needs a

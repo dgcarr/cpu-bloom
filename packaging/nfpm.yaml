@@ -13,7 +13,8 @@ description: |
   Live system monitor that draws your CPU as a glowing flower.
   One petal per CPU thread, with RAM, temperature and GPU, plus an
   always-on-top overlay and an optional tray indicator. Other looks
-  (a 3D ridge landscape, a photorealistic poppy) are available as themes.
+  (a 3D ridge landscape, a photorealistic poppy and orchid) are available
+  as themes.
 homepage: https://github.com/dgcarr/cpu-bloom
 license: MIT
 

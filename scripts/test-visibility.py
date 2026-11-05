@@ -58,7 +58,7 @@ if __name__ == '__main__':
     launcher = sys.argv[1]
     output = pathlib.Path(sys.argv[2]).resolve()
     output.mkdir(parents=True, exist_ok=True)
-    for theme in sys.argv[3:] or ['bloom', 'poppy', 'ridge']:
+    for theme in sys.argv[3:] or ['bloom', 'orchid', 'poppy', 'ridge']:
         with tempfile.TemporaryDirectory() as tmp:
             config = pathlib.Path(tmp) / 'cpu-bloom'
             config.mkdir()

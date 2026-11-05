@@ -3,12 +3,12 @@
 // This is optional: a read-only/full cache always falls back to the originals.
 // Each source has at most the existing three reduced-size tiers. A file stores
 // the source size/mtime, so asset upgrades invalidate it without extra files.
-final Object poppyDiskLock = new Object();
-final long POPPY_DISK_BYTES = 256L * 1024 * 1024;
+final Object frameDiskLock = new Object();
+final long FRAME_DISK_BYTES = 256L * 1024 * 1024;
 
-PImage loadPoppyFrame(String path, int size) throws IOException {
+PImage loadFrameImage(String path, int size) throws IOException {
   File source = new File(path);
-  File cached = poppyCacheFile(source, size);
+  File cached = frameCacheFile(source, size);
   if (cached != null && cached.isFile()) {
     try (java.nio.channels.FileChannel channel = java.nio.channels.FileChannel.open(cached.toPath())) {
       java.nio.ByteBuffer header = java.nio.ByteBuffer.allocate(24);
@@ -45,9 +45,9 @@ PImage loadPoppyFrame(String path, int size) throws IOException {
         try (java.nio.channels.FileChannel channel = java.nio.channels.FileChannel.open(temp, StandardOpenOption.WRITE)) {
           while (bytes.hasRemaining()) channel.write(bytes);
         }
-        synchronized (poppyDiskLock) {
+        synchronized (frameDiskLock) {
           Files.move(temp, cached.toPath(), StandardCopyOption.REPLACE_EXISTING);
-          trimPoppyDiskCache(cached.getParentFile());
+          trimFrameDiskCache(cached.getParentFile());
         }
       } catch (IOException ignored) {
         // Cache availability never prevents animation.
@@ -59,7 +59,7 @@ PImage loadPoppyFrame(String path, int size) throws IOException {
   return image;
 }
 
-File poppyCacheFile(File source, int size) {
+File frameCacheFile(File source, int size) {
   if (size != 400 && size != 640 && size != 960) return null;
   try {
     String xdg = System.getenv("XDG_CACHE_HOME");
@@ -73,16 +73,16 @@ File poppyCacheFile(File source, int size) {
   } catch (Exception e) { return null; }
 }
 
-void trimPoppyDiskCache(File directory) {
+void trimFrameDiskCache(File directory) {
   File[] files = directory.listFiles((dir, name) -> name.endsWith(".pixels"));
   if (files == null) return;
   long total = 0;
   for (File file : files) total += file.length();
-  if (total <= POPPY_DISK_BYTES) return;
+  if (total <= FRAME_DISK_BYTES) return;
   Arrays.sort(files, (a, b) -> Long.compare(a.lastModified(), b.lastModified()));
   for (File file : files) {
     long length = file.length();
     if (file.delete()) total -= length;
-    if (total <= POPPY_DISK_BYTES) break;
+    if (total <= FRAME_DISK_BYTES) break;
   }
 }
