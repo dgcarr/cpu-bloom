@@ -1,8 +1,8 @@
 // Orchid: a photorealistic moth orchid (Phalaenopsis) whose openness follows
 // average CPU load, from a closed bud on its arching stalk at idle to a full
 // bloom facing you at 100%, and whose backlight brightens as the CPU warms
-// up. The frames are rendered with Blender Cycles (orchid/orchid.py);
-// FrameSequenceTheme plays them.
+// up. The frames are rendered with Blender Cycles; FrameSequenceTheme plays
+// them.
 
 class OrchidTheme extends FrameSequenceTheme {
   String id() { return "orchid"; }

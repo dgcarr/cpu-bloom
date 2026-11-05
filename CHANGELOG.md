@@ -3,7 +3,7 @@
 ## Unreleased
 
 - The Orchid theme: a photorealistic moth orchid, rendered with Blender after a bud-to-bloom timelapse, that opens with CPU load and glows with CPU temperature.
-- Pre-rendered themes share one player, `FrameSequenceTheme`, and the Blender scenes share `blender/common.py`.
+- Pre-rendered themes share one player, `FrameSequenceTheme`.
 
 ## 0.1.0 (2026-11-03)
 

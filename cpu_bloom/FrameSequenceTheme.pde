@@ -429,6 +429,6 @@ abstract class FrameSequenceTheme extends Theme {
     text(name() + " frames not found", width / 2, height / 2 - 18 * k);
     useFont(max(9, 15 * k));
     fill(255, 150);
-    text("Render them with " + folder() + "/render.sh, then run ./install.sh", width / 2, height / 2 + 16 * k);
+    text("Reinstall CPU Bloom to restore them", width / 2, height / 2 + 16 * k);
   }
 }

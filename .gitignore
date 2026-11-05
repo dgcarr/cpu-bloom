@@ -1,7 +1,14 @@
 out/
 *.class
-poppy/preview/
 __pycache__/
 dist/
 *.snap
-orchid/preview/
+
+# Development files, kept locally but out of the repository: the Blender
+# scenes that render the frames, the tests and reference footage.
+blender/
+poppy/
+orchid/
+tests/
+scripts/test-*
+*.mp4

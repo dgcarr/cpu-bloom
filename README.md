@@ -232,8 +232,8 @@ cpu_bloom/
   FrameCache.pde     on-disk cache of resized frames for FrameSequenceTheme
   PoppyTheme.pde     the Poppy theme (a FrameSequenceTheme)
   OrchidTheme.pde    the Orchid theme (a FrameSequenceTheme)
-  data/poppy/        the Poppy frames, dim/ and bright/, rendered by poppy/render.sh
-  data/orchid/       the Orchid frames, dim/ and bright/, rendered by orchid/render.sh
+  data/poppy/        the Poppy frames, dim/ and bright/, rendered in Blender
+  data/orchid/       the Orchid frames, dim/ and bright/, rendered in Blender
   SystemSampler.pde  /proc, /sys and nvidia-smi sampling thread
   Overlay.pde        --overlay mode: borderless, always on top, drag/scroll
   Settings.pde       settings.properties shared with the indicator (on top, theme)
@@ -241,11 +241,6 @@ cpu_bloom/
   code/jna-*.jar     JNA (Apache-2.0), used by WindowClass.pde
 bin/cpu-bloom        launcher: runs tray.js with gjs, or the window directly without it
 tray/tray.js         tray indicator and window control (gjs, optional AyatanaAppIndicator3)
-poppy/poppy.py       procedural Blender scene for the Poppy frames
-poppy/render.sh      renders the frames (or --preview stills) with Blender
-orchid/orchid.py     procedural Blender scene for the Orchid frames
-orchid/render.sh     renders the frames (or --preview stills) with Blender
-blender/common.py    helpers shared by both scenes: render, relighting, lights, meshes
 icons/               app icon and symbolic tray icon
 scripts/build-export.sh  Processing export, patched and trimmed for installing
 install.sh           install / uninstall under a prefix (default ~/.local)
@@ -278,21 +273,6 @@ rest of the application use additional memory.
 GPU readings use one persistent `nvidia-smi` process while animating, rather
 than a new process per reading. A separate reader and six-second timeout keep
 GPU-driver stalls from blocking CPU and memory sampling.
-
-### Performance checks
-
-After `./scripts/build-export.sh`:
-
-```bash
-./scripts/test-resources.sh
-python3 scripts/test-visibility.py "$PWD/out/cpu_bloom" /tmp/cpu-bloom-visibility
-```
-
-The first command checks decoder suspension and cache behavior, including exact
-pixel equality with the original image-resizing path. The second opens test
-windows on the current desktop and checks minimize/restore, pause, UI redraw,
-theme changes and closing. It uses isolated settings. Workspace checks run only
-when the window manager exposes desktop properties.
 
 For visibility diagnostics, set `CPU_BLOOM_METRICS=/absolute/path/metrics.csv`.
 The optional CSV records cumulative drawn frames and visibility/pause/suspension

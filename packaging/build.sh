@@ -37,7 +37,7 @@ mkdir -p "$DIST"
 # Tarball: the staged app plus install.sh, for distributions without a package.
 TARBALL="$DIST/cpu-bloom-$VERSION-linux-$ARCH.tar.gz"
 tar -C "$REPO" -czf "$TARBALL" --transform "s#^#cpu-bloom-$VERSION/#" \
-  install.sh scripts bin tray icons out README.md THEMES.md CHANGELOG.md LICENSE
+  install.sh scripts/build-export.sh bin tray icons out README.md THEMES.md CHANGELOG.md LICENSE
 echo "Wrote $TARBALL"
 
 export NFPM_ARCH VERSION
