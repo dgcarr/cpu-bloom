@@ -6,14 +6,13 @@
 #
 # Extra arguments are passed to poppy.py (--frames, --start, --res, --samples,
 # --dim, --bright, --out). --start N resumes a stopped run at frame N.
-# Set BLENDER=/path/to/blender if it isn't in ~/blender-5.2*/ or on PATH.
+# Uses Blender on PATH; set BLENDER=/path/to/blender to override.
 
 set -euo pipefail
 
 REPO="$(cd "$(dirname "$0")/.." && pwd)"
 if [[ -z "${BLENDER:-}" ]]; then
-  BLENDER="$(ls -d "$HOME"/blender-5.2*/blender 2>/dev/null | sort -V | tail -1 || true)"
-  [[ -n "$BLENDER" ]] || BLENDER="$(command -v blender || true)"
+  BLENDER="$(command -v blender || true)"
 fi
 [[ -x "$BLENDER" ]] || { echo "Blender not found; set BLENDER=/path/to/blender" >&2; exit 1; }
 
