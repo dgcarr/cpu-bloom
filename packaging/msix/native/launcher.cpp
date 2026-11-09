@@ -1,6 +1,8 @@
 #include "platform.h"
 
 int WINAPI wWinMain(HINSTANCE, HINSTANCE, PWSTR arguments, int) {
+    // The manifest enables PerMonitorV2 for native Windows error dialogs.
+    // The separately launched JVM establishes its own renderer DPI awareness.
     try {
         winrt::init_apartment(winrt::apartment_type::multi_threaded);
         configureEnvironment();

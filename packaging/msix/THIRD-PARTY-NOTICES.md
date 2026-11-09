@@ -1,20 +1,40 @@
-# Third-party software
+# Third-party software — Store distribution
 
-CPU Bloom is MIT licensed. Its dependencies retain their original licenses:
+Reviewed 9 November 2026 for CPU Bloom 0.3.7. CPU Bloom code and owner-created
+animations are MIT licensed. Dependencies retain their own licenses and copyrights.
 
-| Component | Version | License / upstream |
+| Distributed component | Version | License and accompanying material |
 |---|---|---|
-| Processing core | 4.5.7 | LGPL-2.1; https://github.com/processing/processing4 |
-| Eclipse Temurin Java runtime | 17.0.21+9 | GPL-2.0 with Classpath Exception; https://github.com/adoptium/temurin17-binaries |
-| JOGL / GlueGen | 2.6.0 | BSD-style and component notices; https://jogamp.org |
-| JNA / JNA Platform | 5.19.1 | Apache-2.0 or LGPL-2.1; https://github.com/java-native-access/jna |
-| OSHI | 6.9.3 | MIT; https://github.com/oshi/oshi |
-| SLF4J API / no-op backend | 2.0.17 | MIT; https://www.slf4j.org |
-| Kotlin standard library | 2.3.21 | Apache-2.0; https://github.com/JetBrains/kotlin |
-| JetBrains annotations | 13.0 | Apache-2.0; https://github.com/JetBrains/java-annotations |
-| ANTLR | 2.7.7 | Public-domain dedication / upstream license; https://www.antlr2.org |
-| Processing Serial / jSSC (exported dependencies) | See binary inventory | Preserve included LGPL notices and upstream license text; review whether unused export dependencies can be removed |
+| Processing core | 4.5.7 | LGPL 2.1; full license, corresponding source, build and replacement instructions |
+| Eclipse Temurin/OpenJDK | 17.0.21+9 | GPL 2 with Classpath Exception; complete java/legal, java/NOTICE, corresponding source and Temurin build scripts |
+| JOGL and Windows native libraries | 2.6.0 | BSD 2/3 clause, SGI FreeB, Apache 1.1/2.0 and upstream component notices |
+| GlueGen runtime and Windows natives | 2.6.0 | BSD 2/3 clause and Apache 2.0 component notices |
+| JNA and JNA Platform | 5.19.1 | Apache 2.0 selected from upstream dual-license option; native libffi MIT notice included |
+| OSHI | 6.9.3 | MIT copyright and license included |
+| SLF4J API and no-op backend | 2.0.17 | MIT; original JAR notices extracted |
+| Processing Sans Pro font | Bundled with core | Adobe copyright and SIL Open Font License 1.1 retained; unmodified |
+| Processing cursor artwork | Bundled with core | MIT; original embedded cursor license retained |
+| Microsoft runtime components | Supplied with Temurin / native C++ builds | Microsoft runtime redistribution terms; runtime files remain with their supplying product |
 
-The package contains Java runtime notices in `java/legal`, extracted JAR notices in `ThirdPartyNotices`, and a SHA-256 binary inventory. These are an inventory, not a substitute for reviewing each license.
+`ThirdPartyNotices/upstream` contains exact upstream texts; `provenance.json`
+records their source archive URL, checksum and member. Extracted JAR notices are
+also in `ThirdPartyNotices`; `binary-inventory.json` identifies the shipped JARs.
+`Sources/README.md` explains accompanying source and replacement/relinking rights.
+No third-party library was modified. No separate fee is charged for source.
 
-RELEASE GATE: collect the exact corresponding source for distributed LGPL/GPL components (including native components), any modifications and applicable build instructions; provide a license-compliant source distribution/offer and preserve required replacement/relinking rights. Review the entire extracted notice inventory before setting `ThirdPartyNoticesReviewed=true`. No assertion of completed legal review is made by the test build.
+The Store package omits unused Kotlin, annotations, ANTLR, Serial/jSSC and empty
+aggregator JARs exported by Processing. It does not distribute the Processing IDE
+as an executable application. JOGL's optional Oculus native artifacts are absent.
+Upstream notices may describe additional components not present in these runtime
+JARs; they are preserved intact rather than edited. Runtime legal files include
+OpenJDK's component-specific third-party and exception notices.
+
+This review applies to the pinned inputs and runtime allowlist in this release.
+Any dependency update requires renewed review of licenses, source and notices.
+
+Microsoft redistribution references (reviewed 9 November 2026):
+https://learn.microsoft.com/en-us/visualstudio/releases/2022/redistribution
+https://learn.microsoft.com/en-us/cpp/windows/redistributing-visual-cpp-files
+Native launchers use the release C++ runtime linked into the application; no
+compiler, SDK, debug runtime or Visual Studio utility is shipped as a runtime tool.
+The bundled Temurin runtime and its notices are redistributed unchanged.

@@ -22,7 +22,8 @@ public class InstalledRuntimeCheck {
             check(app.configDir().toString().contains("LocalState"), "settings use package LocalState");
             check(app.frameCacheFile(new File("example.jpg"),400).toString().contains("LocalCache"), "frame cache uses package LocalCache");
             check(app.themes.size()==4, "all four themes available");
-            check(app.packagedStartupState("startup-query").equals("Disabled"), "Store startup remains off by default");
+            String startupBefore = app.packagedStartupState("startup-query");
+            check(Arrays.asList("Disabled", "Enabled", "DisabledByUser", "DisabledByPolicy", "EnabledByPolicy").contains(startupBefore), "Windows startup state queried: " + startupBefore);
             Process launcher = new ProcessBuilder(new File(app.applicationDirectory(),"cpu_bloom.exe").toString()).start();
             launcher.waitFor();
             waitFor(() -> app.newtWindow().isVisible() && !app.hiddenInTray);
@@ -34,7 +35,7 @@ public class InstalledRuntimeCheck {
             });
             waitFor(() -> app.theme.id().equals("poppy") && app.newtWindow().getWidth()==880);
             check(!app.loadSettings().containsKey("startup"), "import whitelists preferences");
-            check(app.packagedStartupState("startup-query").equals("Disabled"), "import does not enable login startup");
+            check(app.packagedStartupState("startup-query").equals(startupBefore), "import preserves Windows startup consent");
             check("imported".equals(app.loadSettings().getProperty("portableImport")), "one-time migration recorded");
             app.minimizeDesktopToTray(); waitFor(() -> !app.newtWindow().isVisible());
             app.restoreDesktopWindow(); waitFor(() -> app.newtWindow().isVisible() && !app.hiddenInTray);

@@ -54,7 +54,9 @@ New-Item -ItemType Directory -Force $stage | Out-Null
 $tool = Start-Process -FilePath (Join-Path $ProcessingRoot 'Processing.exe') -ArgumentList @('cli', "--sketch=`"$repo\cpu_bloom`"", "--output=`"$export`"", '--variant=windows-amd64', '--no-java', '--export') -WindowStyle Hidden -RedirectStandardOutput (Join-Path $build 'processing.log') -RedirectStandardError (Join-Path $build 'processing.err') -Wait -PassThru
 if ($tool.ExitCode -ne 0 -or !(Test-Path "$export/lib/cpu_bloom.jar")) { throw "Processing failed; inspect $build" }
 New-Item -ItemType Directory "$stage/lib" | Out-Null
-Get-ChildItem "$export/lib/*.jar" | Where-Object { $_.Name -notlike '*-natives-*' -or $_.Name -like '*-natives-windows-amd64.jar' } | Copy-Item -Destination "$stage/lib"
+# Explicit runtime closure: Processing exports editor/serial dependencies too.
+$runtimeJars = @('cpu_bloom.jar','core-4.5.7.jar','gluegen-rt-2.6.0.jar','gluegen-rt-2.6.0-natives-windows-amd64.jar','jogl-all-2.6.0.jar','jogl-all-2.6.0-natives-windows-amd64.jar','jna-5.19.1.jar','jna-platform-5.19.1.jar','oshi-core-6.9.3.jar','slf4j-api-2.0.17.jar','slf4j-nop-2.0.17.jar')
+foreach ($jar in $runtimeJars) { Copy-Item -LiteralPath "$export/lib/$jar" -Destination "$stage/lib" }
 Copy-Item "$export/data" "$stage/data" -Recurse
 Expand-Archive -LiteralPath $JreArchive -DestinationPath "$build/runtime"
 $runtime = @(Get-ChildItem "$build/runtime" -Directory)
@@ -68,18 +70,19 @@ Copy-Item "$repo/docs/privacy.html" "$stage/privacy.html"
 Copy-Item "$repo/docs/support.html" "$stage/support.html"
 Copy-Item "$repo/docs/index.html" "$stage/index.html"
 Copy-Item "$repo/docs/site.css" "$stage/site.css"
-$previousInclude = $env:INCLUDE; $previousLib = $env:LIB
+$previousInclude = $env:INCLUDE; $previousLib = $env:LIB; $previousPath = $env:PATH
 try {
+    $env:PATH = "$sdkBin;$env:PATH"
     $env:INCLUDE = "$msvc/include;$sdkInclude/ucrt;$sdkInclude/shared;$sdkInclude/um;$sdkInclude/winrt;$sdkInclude/cppwinrt"
     $env:LIB = "$msvc/lib/x64;$sdkLib/ucrt/x64;$sdkLib/um/x64"
     $common = @('/nologo','/std:c++17','/EHsc','/O2','/MT','/W4','/guard:cf','/Brepro','/DUNICODE','/D_UNICODE')
-    & $cl @common "$PSScriptRoot/native/launcher.cpp" "/Fo$build/launcher.obj" "/Fe$stage/cpu_bloom.exe" /link /SUBSYSTEM:WINDOWS /DYNAMICBASE /NXCOMPAT windowsapp.lib shell32.lib ole32.lib user32.lib
+    & $cl @common "$PSScriptRoot/native/launcher.cpp" "/Fo$build/launcher.obj" "/Fe$stage/cpu_bloom.exe" /link /SUBSYSTEM:WINDOWS /DYNAMICBASE /NXCOMPAT /MANIFEST:EMBED "/MANIFESTINPUT:$PSScriptRoot/native/desktop.manifest" windowsapp.lib shell32.lib ole32.lib user32.lib
     if ($LASTEXITCODE) { throw 'Launcher compilation failed' }
-    & $cl @common /DCPU_BLOOM_STARTUP "$PSScriptRoot/native/launcher.cpp" "/Fo$build/startup.obj" "/Fe$stage/cpu_bloom_startup.exe" /link /SUBSYSTEM:WINDOWS /DYNAMICBASE /NXCOMPAT windowsapp.lib shell32.lib ole32.lib user32.lib
+    & $cl @common /DCPU_BLOOM_STARTUP "$PSScriptRoot/native/launcher.cpp" "/Fo$build/startup.obj" "/Fe$stage/cpu_bloom_startup.exe" /link /SUBSYSTEM:WINDOWS /DYNAMICBASE /NXCOMPAT /MANIFEST:EMBED "/MANIFESTINPUT:$PSScriptRoot/native/desktop.manifest" windowsapp.lib shell32.lib ole32.lib user32.lib
     if ($LASTEXITCODE) { throw 'Startup launcher compilation failed' }
-    & $cl @common "$PSScriptRoot/native/store-bridge.cpp" "/Fo$build/bridge.obj" "/Fe$stage/store-bridge.exe" /link /SUBSYSTEM:CONSOLE /DYNAMICBASE /NXCOMPAT windowsapp.lib shell32.lib ole32.lib
+    & $cl @common "$PSScriptRoot/native/store-bridge.cpp" "/Fo$build/bridge.obj" "/Fe$stage/store-bridge.exe" /link /SUBSYSTEM:CONSOLE /DYNAMICBASE /NXCOMPAT /MANIFEST:EMBED "/MANIFESTINPUT:$PSScriptRoot/native/desktop.manifest" windowsapp.lib shell32.lib ole32.lib
     if ($LASTEXITCODE) { throw 'Store bridge compilation failed' }
-} finally { $env:INCLUDE = $previousInclude; $env:LIB = $previousLib }
+} finally { $env:INCLUDE = $previousInclude; $env:LIB = $previousLib; $env:PATH = $previousPath }
 $manifest = Get-Content "$PSScriptRoot/AppxManifest.xml" -Raw
 foreach ($key in @('IdentityName','Publisher','PublisherDisplayName','DisplayName','Version')) {
     $manifest = $manifest.Replace("@@$key@@", [System.Security.SecurityElement]::Escape([string]$config.$key))
@@ -88,6 +91,8 @@ foreach ($key in @('IdentityName','Publisher','PublisherDisplayName','DisplayNam
 [IO.File]::WriteAllText("$stage/AppxManifest.xml", $manifest, [Text.UTF8Encoding]::new($false))
 & python "$PSScriptRoot/inventory.py" $stage
 if ($LASTEXITCODE) { throw 'Dependency inventory failed' }
+& python "$PSScriptRoot/prepare-licenses.py" $stage
+if ($LASTEXITCODE) { throw 'License/source assembly failed' }
 $package = Join-Path $build "cpu-bloom-$Version-x64.msix"
 & "$sdkBin/makeappx.exe" pack /d $stage /p $package /o *> "$build/makeappx.log"
 if ($LASTEXITCODE) { throw 'MSIX packaging or manifest validation failed' }

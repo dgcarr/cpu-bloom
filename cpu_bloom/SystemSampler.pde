@@ -266,6 +266,8 @@ class SystemSampler implements Runnable {
   // thread; the 200 ms sampler enforces a six-second output timeout.
   void readGpu() {
     if (windowsHardware != null && readWindowsGpu()) return;
+    // Store distribution uses native Windows counters only, never external tools.
+    if (isStorePackage()) return;
     while (running) {
       Process p = null;
       int epoch = gpuEpoch;

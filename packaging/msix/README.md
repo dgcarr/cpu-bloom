@@ -61,15 +61,15 @@ remote command channel is opened. OS file locking releases ownership after a cra
 ## Release configuration
 
 `store-config.json` contains CPU Bloom's assigned Partner Center identity and
-public GitHub Pages privacy/support URLs. It contains no credentials. The remaining
-third-party notice/source review flag intentionally stays false until that review
-is complete. For another publisher, copy `store-config.example.json` and populate
+public GitHub Pages privacy/support URLs. It contains no credentials. The dependency review is recorded in `THIRD-PARTY-NOTICES.md`. Builds verify
+`Sources` archive checksums and notice provenance, and include corresponding source
+for Processing and the Java runtime. For another publisher, copy `store-config.example.json` and populate
 the exact assigned values. Do not fabricate a publisher identity.
 Review `ASSET-PROVENANCE.md`, `THIRD-PARTY-NOTICES.md`, the extracted notices, and
 `STORE-SUBMISSION.md`, then set the explicit review flags.
 
 ```powershell
-./packaging/msix/build-msix.ps1 -Mode Store -ConfigFile 'C:\private\cpu-bloom-store.json'
+./packaging/msix/build-msix.ps1 -Mode Store -ConfigFile packaging/msix/store-config.json
 ```
 
 Store mode refuses missing identity/URLs, test publisher markers, malformed package

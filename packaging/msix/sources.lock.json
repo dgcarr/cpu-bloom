@@ -1,0 +1,32 @@
+[
+  {
+    "file": "OpenJDK17U-jdk-sources_17.0.21_9.tar.gz",
+    "url": "https://github.com/adoptium/temurin17-binaries/releases/download/jdk-17.0.21%2B9/OpenJDK17U-jdk-sources_17.0.21_9.tar.gz",
+    "sha256": "89a455fa83b19e3a166bca47a465d51712441be607543dd465083ef2437a426d",
+    "bytes": 109791166
+  },
+  {
+    "file": "processing-4.5.7.tar.gz",
+    "url": "https://codeload.github.com/processing/processing4/tar.gz/ca3999abed94d84764370f120daaaaf9f0a77ae8",
+    "sha256": "02f6dec49d83ab11e1946938ee425f4de22d1bb2249931e15570d275b407a0d9",
+    "bytes": 53391617
+  },
+  {
+    "file": "temurin-build.tar.gz",
+    "url": "https://codeload.github.com/adoptium/temurin-build/tar.gz/1cf43d7a3e77886bfea7d550a902e151a87d724d",
+    "sha256": "f524e42fdb6480934dae49e59b07bd979763dfb413046f73b8cbceefe5b08591",
+    "bytes": 625385
+  },
+  {
+    "file": "jre-metadata.json",
+    "url": "https://github.com/adoptium/temurin17-binaries/releases/download/jdk-17.0.21%2B9/OpenJDK17U-jre_x64_windows_hotspot_17.0.21_9.zip.json",
+    "sha256": "9530f46d1054ce0b8ffc59ea35bcf8f8fcbb7e454e57e632b7afa341ed0dae42",
+    "bytes": 29079
+  },
+  {
+    "file": "jre-sbom.json",
+    "url": "https://github.com/adoptium/temurin17-binaries/releases/download/jdk-17.0.21%2B9/OpenJDK17U-sbom_x64_windows_hotspot_17.0.21_9.json",
+    "sha256": "010af405ca14f34b235e9c161e0cf2527d5edd3def9142c87e1069496c8d5b8a",
+    "bytes": 155558
+  }
+]

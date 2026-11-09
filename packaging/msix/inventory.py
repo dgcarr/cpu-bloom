@@ -15,7 +15,7 @@ for jar in sorted((stage / "lib").glob("*.jar")):
     with zipfile.ZipFile(jar) as archive:
         for name in archive.namelist():
             leaf = pathlib.PurePosixPath(name).name
-            if not name.endswith("/") and re.match(r"(?i)^(license|notice|copying|copyright)([._-].*)?$", leaf):
+            if not name.endswith("/") and re.search(r"(?i)(^|[-_.])(license|notice|copying|copyright)([-_.]|$)", leaf):
                 destination = notices / jar.stem / name.replace("/", "_").replace("\\", "_")
                 destination.parent.mkdir(exist_ok=True)
                 destination.write_bytes(archive.read(name))

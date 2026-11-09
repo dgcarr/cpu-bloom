@@ -1,4 +1,60 @@
-# Local validation: 0.3.2
+# Store candidate 0.3.7.0 — 9 November 2026
+
+The actual unsigned Store MSIX, with identity `David-Carr.CPUBloom`, completed
+Windows App Certification Kit 10.0.26100.7705 using `-appxpackagepath`.
+**Overall: PASS. All required tests: PASS, including DPIAwarenessValidation.**
+This is a local certification result, not Microsoft Store acceptance.
+
+- SHA-256: `0F4D3F2AFCC1F894B8B7130E63196D381B372213CC50D9CE21BE6406DF6AC782`.
+- Package: `dist/msix/store-0.3.7.0-7a60cb7b/cpu-bloom-0.3.7.0-x64.msix`.
+- Full report: `dist/msix/certification-store-0.3.7/wack.xml`.
+- Versioned evidence file: `certification-0.3.7.json` records report/package
+  hashes and each test result. `summarize-wack.py --require-pass` rejects required
+  warnings/failures instead of trusting the tool's process exit code.
+- Optional Archive files usage and Blocked executables tests remain FAIL. The
+  first flags accompanying source archives; the second flags bundled runtime
+  process APIs and executable-name strings in libraries/source/license materials.
+  See the explicit triage in `STORE-SUBMISSION.md`. These do not turn this report's
+  overall PASS into a failure; they have not been hidden or removed from the report.
+
+## Changes and verification
+
+The three native executables embed asInvoker/PerMonitorV2 manifests. Windows
+handles their native dialogs; the Java renderer establishes its own awareness.
+A live installed Java rendering process returned per-monitor awareness (2) from
+GetProcessDpiAwareness. Mixed-DPI/multi-monitor behavior still needs hardware testing.
+The earlier installed-unsigned-package workflow produced COM manifest-reader
+errors; using the actual Store archive exposed the PerMonitorV2 requirement and
+then verified the correction without altering Windows security settings.
+
+The pinned dependency review is complete: exact notices and provenance, embedded
+font/cursor licenses, full Processing/OpenJDK sources, Temurin build scripts and
+replacement/relinking instructions accompany the package. Unused exported
+libraries are excluded. The Store GPU path does not invoke external NVIDIA tools.
+
+Package-content, source-checksum, embedded-manifest, helper and configuration-gate
+checks passed. The final Store and test native executables are byte-identical and
+all JAR member contents match. Installed tests of the same Java payload verified
+package storage, four themes, tray restoration, duplicate activation and explicit
+import preserving the existing Enabled startup state. All four themes rendered
+and their screenshots were inspected on AMD Radeon 840M / OpenGL 4.6.
+
+The installed 0.3.7 efficiency check also passed: zero frames and GPU collections
+while tray-hidden or natively minimized, two CPU/RAM sampling cycles per 4.2 seconds,
+and rendering/sampling resumed on restore. These short checks measured 93.75 ms
+and 187.5 ms process CPU time respectively, not a controlled performance benchmark.
+
+## Still required before public release
+
+Publisher verification, final listing/screenshots and IARC questionnaire, clean
+Windows 11 with Smart App Control enabled, Intel/NVIDIA and multiple-monitor
+coverage, actual sign-out/sign-in, uninstall/reinstall and a private Store flight.
+No security setting was changed. The 0.3.4 portable bundle remains separate;
+this candidate and license review target the MSIX distribution.
+
+---
+
+# Validation history
 
 ## 0.3.4 Windows GPU activity update
 

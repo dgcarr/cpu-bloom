@@ -1,0 +1,134 @@
+[
+  {
+    "file": "licenses/processing-4.5.7/core/LICENSE.md",
+    "sha256": "93ce7c198b9b1644ed580806a00fea3c46f8d291c12039d9f8a44494e462ee8c",
+    "archive": {
+      "file": "processing-4.5.7.tar.gz",
+      "url": "https://codeload.github.com/processing/processing4/tar.gz/ca3999abed94d84764370f120daaaaf9f0a77ae8",
+      "sha256": "02f6dec49d83ab11e1946938ee425f4de22d1bb2249931e15570d275b407a0d9",
+      "bytes": 53391617
+    },
+    "member": "processing4-ca3999abed94d84764370f120daaaaf9f0a77ae8/core/LICENSE.md"
+  },
+  {
+    "file": "licenses/jogl-2.6.0/LICENSE.txt",
+    "sha256": "640179a1a25e0c00e581da864fab1097c01cdb3564240292022af74b0901d743",
+    "archive": {
+      "file": "jogl-2.6.0.tar.gz",
+      "url": "https://codeload.github.com/sgothel/jogl/tar.gz/f5964604d3e940c07c3e6af884f06b4eceb08dd4",
+      "sha256": "4068f55137ae9e13d7d9fca23c15a22175f443e8d81e56f89f8d7f5a7797bae9",
+      "bytes": 62676660
+    },
+    "member": "jogl-f5964604d3e940c07c3e6af884f06b4eceb08dd4/LICENSE.txt"
+  },
+  {
+    "file": "licenses/jogl-2.6.0/doc/licenses/Apache.LICENSE-1.1",
+    "sha256": "1417075f2e81545660185430ec7f67847d3bcea97b060866c436d63ebf4be0d4",
+    "archive": {
+      "file": "jogl-2.6.0.tar.gz",
+      "url": "https://codeload.github.com/sgothel/jogl/tar.gz/f5964604d3e940c07c3e6af884f06b4eceb08dd4",
+      "sha256": "4068f55137ae9e13d7d9fca23c15a22175f443e8d81e56f89f8d7f5a7797bae9",
+      "bytes": 62676660
+    },
+    "member": "jogl-f5964604d3e940c07c3e6af884f06b4eceb08dd4/doc/licenses/Apache.LICENSE-1.1"
+  },
+  {
+    "file": "licenses/jogl-2.6.0/doc/licenses/Apache.LICENSE-2.0",
+    "sha256": "cfc7749b96f63bd31c3c42b5c471bf756814053e847c10f3eb003417bc523d30",
+    "archive": {
+      "file": "jogl-2.6.0.tar.gz",
+      "url": "https://codeload.github.com/sgothel/jogl/tar.gz/f5964604d3e940c07c3e6af884f06b4eceb08dd4",
+      "sha256": "4068f55137ae9e13d7d9fca23c15a22175f443e8d81e56f89f8d7f5a7797bae9",
+      "bytes": 62676660
+    },
+    "member": "jogl-f5964604d3e940c07c3e6af884f06b4eceb08dd4/doc/licenses/Apache.LICENSE-2.0"
+  },
+  {
+    "file": "licenses/jogl-2.6.0/doc/licenses/SGIFreeSWLicB.2.0.pdf",
+    "sha256": "b68fc36f8695468d617f947c1e9a6d9d32611b87747c0b41fb14ab8714965e82",
+    "archive": {
+      "file": "jogl-2.6.0.tar.gz",
+      "url": "https://codeload.github.com/sgothel/jogl/tar.gz/f5964604d3e940c07c3e6af884f06b4eceb08dd4",
+      "sha256": "4068f55137ae9e13d7d9fca23c15a22175f443e8d81e56f89f8d7f5a7797bae9",
+      "bytes": 62676660
+    },
+    "member": "jogl-f5964604d3e940c07c3e6af884f06b4eceb08dd4/doc/licenses/SGIFreeSWLicB.2.0.pdf"
+  },
+  {
+    "file": "licenses/jogl-2.6.0/doc/licenses/ubuntu-font-licence-1.0.txt",
+    "sha256": "2f0015108d68627bd788d313f529c21ff4da2c2c42a5e1f3883acc83480f9002",
+    "archive": {
+      "file": "jogl-2.6.0.tar.gz",
+      "url": "https://codeload.github.com/sgothel/jogl/tar.gz/f5964604d3e940c07c3e6af884f06b4eceb08dd4",
+      "sha256": "4068f55137ae9e13d7d9fca23c15a22175f443e8d81e56f89f8d7f5a7797bae9",
+      "bytes": 62676660
+    },
+    "member": "jogl-f5964604d3e940c07c3e6af884f06b4eceb08dd4/doc/licenses/ubuntu-font-licence-1.0.txt"
+  },
+  {
+    "file": "licenses/gluegen-2.6.0/LICENSE.txt",
+    "sha256": "12d8ec9429d07b6a9413ed36de4c61423f617ae3219b6ea2129acc4b65c985c5",
+    "archive": {
+      "file": "gluegen-2.6.0.tar.gz",
+      "url": "https://codeload.github.com/sgothel/gluegen/tar.gz/c06493e448332ace78721f5dfc3718c863783a12",
+      "sha256": "e13dc91161cc72b1b97292aa7a8c19478b0bdf7b5f99f2cbd3d8c7845b6ac2ed",
+      "bytes": 73536429
+    },
+    "member": "gluegen-c06493e448332ace78721f5dfc3718c863783a12/LICENSE.txt"
+  },
+  {
+    "file": "licenses/gluegen-2.6.0/doc/licenses/Apache.LICENSE-2.0",
+    "sha256": "cfc7749b96f63bd31c3c42b5c471bf756814053e847c10f3eb003417bc523d30",
+    "archive": {
+      "file": "gluegen-2.6.0.tar.gz",
+      "url": "https://codeload.github.com/sgothel/gluegen/tar.gz/c06493e448332ace78721f5dfc3718c863783a12",
+      "sha256": "e13dc91161cc72b1b97292aa7a8c19478b0bdf7b5f99f2cbd3d8c7845b6ac2ed",
+      "bytes": 73536429
+    },
+    "member": "gluegen-c06493e448332ace78721f5dfc3718c863783a12/doc/licenses/Apache.LICENSE-2.0"
+  },
+  {
+    "file": "licenses/jna-5.19.1/LICENSE",
+    "sha256": "07c938b23950ab7d47a24ef35f9f5da3a05ae164278dc959ad6994135ed59ff1",
+    "archive": {
+      "file": "jna-5.19.1.tar.gz",
+      "url": "https://codeload.github.com/java-native-access/jna/tar.gz/1a91122853f6ab6f1fb2a4a284a6cf2ed8af0a4d",
+      "sha256": "156ac0437bcd025c1eb4960d26acf883be5557d6d45b7afe38af5ec0c58d5591",
+      "bytes": 121718935
+    },
+    "member": "jna-1a91122853f6ab6f1fb2a4a284a6cf2ed8af0a4d/LICENSE"
+  },
+  {
+    "file": "licenses/jna-5.19.1/AL2.0",
+    "sha256": "0d542e0c8804e39aa7f37eb00da5a762149dc682d7829451287e11b938e94594",
+    "archive": {
+      "file": "jna-5.19.1.tar.gz",
+      "url": "https://codeload.github.com/java-native-access/jna/tar.gz/1a91122853f6ab6f1fb2a4a284a6cf2ed8af0a4d",
+      "sha256": "156ac0437bcd025c1eb4960d26acf883be5557d6d45b7afe38af5ec0c58d5591",
+      "bytes": 121718935
+    },
+    "member": "jna-1a91122853f6ab6f1fb2a4a284a6cf2ed8af0a4d/AL2.0"
+  },
+  {
+    "file": "licenses/jna-5.19.1/native/libffi/LICENSE",
+    "sha256": "2c9c2acb9743e6b007b91350475308aee44691d96aa20eacef8e199988c8c388",
+    "archive": {
+      "file": "jna-5.19.1.tar.gz",
+      "url": "https://codeload.github.com/java-native-access/jna/tar.gz/1a91122853f6ab6f1fb2a4a284a6cf2ed8af0a4d",
+      "sha256": "156ac0437bcd025c1eb4960d26acf883be5557d6d45b7afe38af5ec0c58d5591",
+      "bytes": 121718935
+    },
+    "member": "jna-1a91122853f6ab6f1fb2a4a284a6cf2ed8af0a4d/native/libffi/LICENSE"
+  },
+  {
+    "file": "licenses/oshi-6.9.3/LICENSE",
+    "sha256": "e5936ec705d2fb0515b0d3e9a76acb52c1eef3e8ff88c7b9f80269b7909c959c",
+    "archive": {
+      "file": "oshi-6.9.3.tar.gz",
+      "url": "https://codeload.github.com/oshi/oshi/tar.gz/7b3f08bb0418dc710553acd32ccd0fa53c6e127b",
+      "sha256": "b97410695842f5acb1addd4452a7e3e1daebe9973d8abefff328826bc5d2d7bd",
+      "bytes": 2264954
+    },
+    "member": "oshi-7b3f08bb0418dc710553acd32ccd0fa53c6e127b/LICENSE"
+  }
+]

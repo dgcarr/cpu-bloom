@@ -157,9 +157,10 @@ preferences can be exported/imported explicitly without copying startup consent.
 Local test packages are clearly marked and are not Store submissions. Store
 release builds require your assigned Partner Center identity, published privacy
 and support URLs, and completed rights/license review.
-The 0.3.2 local package completed WACK with an overall **WARNING**, including an
-optional blocked-executables test failure and a DPI-awareness warning; see the
-[validation record](packaging/msix/VALIDATION.md). Generated MSIX files and build
+The 0.3.7 Store build includes reviewed third-party notices, matching Java and
+Processing source archives, and instructions for replacing libraries. Unused
+exported libraries are excluded. See the [validation record](packaging/msix/VALIDATION.md)
+for certification results and remaining release checks. Generated MSIX files and build
 logs remain under ignored `dist/`; the committed runnable bundle above is portable.
 
 ### Install from source

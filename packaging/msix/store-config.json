@@ -3,9 +3,9 @@
   "Publisher": "CN=FCB63515-57DD-4F64-9C1F-C15117FFFD54",
   "PublisherDisplayName": "David-Carr",
   "DisplayName": "CPU Bloom",
-  "Version": "0.3.4.0",
+  "Version": "0.3.7.0",
   "PrivacyUrl": "https://dgcarr.github.io/cpu-bloom/privacy.html",
   "SupportUrl": "https://dgcarr.github.io/cpu-bloom/support.html",
   "AssetRightsReviewed": true,
-  "ThirdPartyNoticesReviewed": false
+  "ThirdPartyNoticesReviewed": true
 }
