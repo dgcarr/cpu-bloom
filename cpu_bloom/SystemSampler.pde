@@ -1,6 +1,6 @@
 // Reads CPU, memory, temperature and GPU stats on a background thread.
-// Everything comes from /proc and /sys except the GPU numbers, which come
-// from nvidia-smi when it is installed.
+// Linux uses /proc and /sys; Windows uses OSHI for CPU topology/load and RAM.
+// GPU numbers come from nvidia-smi when it is installed.
 
 class SystemSampler implements Runnable {
   final int cpuCount;
@@ -33,7 +33,38 @@ class SystemSampler implements Runnable {
   private final float[][] fakeTemp = parseSchedule("temp", System.getenv("CPU_BLOOM_FAKE_TEMP"), -50, 150);
   private final long startMs = System.currentTimeMillis();
 
+  private final oshi.hardware.HardwareAbstractionLayer windowsHardware =
+    System.getProperty("os.name").startsWith("Windows") ? new oshi.SystemInfo().getHardware() : null;
+  private long[][] windowsTicks;
+
   SystemSampler() {
+    if (windowsHardware != null) {
+      oshi.hardware.CentralProcessor cpu = windowsHardware.getProcessor();
+      cpuCount = cpu.getLogicalProcessorCount();
+      coreCount = cpu.getPhysicalProcessorCount();
+      cpuModel = cpu.getProcessorIdentifier().getName();
+      usage = new float[cpuCount];
+      prevIdle = new long[cpuCount];
+      prevTotal = new long[cpuCount];
+      displayOrder = new int[cpuCount];
+      coreRank = new int[cpuCount];
+      java.util.List<oshi.hardware.CentralProcessor.LogicalProcessor> logical = cpu.getLogicalProcessors();
+      java.util.Map<String, Integer> ranks = new java.util.LinkedHashMap<String, Integer>();
+      Integer[] order = new Integer[cpuCount];
+      for (int i = 0; i < cpuCount; i++) {
+        oshi.hardware.CentralProcessor.LogicalProcessor lp = logical.get(i);
+        String key = lp.getPhysicalPackageNumber() + ":" + lp.getPhysicalProcessorNumber();
+        if (!ranks.containsKey(key)) ranks.put(key, ranks.size());
+        coreRank[i] = ranks.get(key);
+        order[i] = i;
+      }
+      Arrays.sort(order, (a, b) -> Integer.compare(coreRank[a], coreRank[b]));
+      for (int i = 0; i < cpuCount; i++) displayOrder[i] = order[i];
+      windowsTicks = cpu.getProcessorCpuLoadTicks();
+      tempPath = null;
+      loadAvg = "N/A";
+      return;
+    }
     int count = 0;
     for (String line : lines("/proc/stat")) {
       if (line.matches("cpu\\d+ .*")) count++;
@@ -104,6 +135,21 @@ class SystemSampler implements Runnable {
 
   void sampleCpu() {
     float[] next = new float[cpuCount];
+    if (windowsHardware != null) {
+      oshi.hardware.CentralProcessor cpu = windowsHardware.getProcessor();
+      long[][] ticks = cpu.getProcessorCpuLoadTicks();
+      int idleIndex = oshi.hardware.CentralProcessor.TickType.IDLE.getIndex();
+      for (int i = 0; i < cpuCount; i++) {
+        long total = 0;
+        for (int j = 0; j < ticks[i].length; j++) total += ticks[i][j] - windowsTicks[i][j];
+        long idle = ticks[i][idleIndex] - windowsTicks[i][idleIndex];
+        next[i] = total > 0 ? constrain(1f - idle / (float) total, 0, 1) : usage[i];
+      }
+      windowsTicks = ticks;
+      if (fakeLoad != null) Arrays.fill(next, scheduleValue(fakeLoad));
+      usage = next;
+      return;
+    }
     for (String line : lines("/proc/stat")) {
       if (!line.startsWith("cpu") || line.charAt(3) == ' ') continue;
       String[] f = line.trim().split("\\s+");
@@ -149,6 +195,12 @@ class SystemSampler implements Runnable {
   }
 
   void sampleMem() {
+    if (windowsHardware != null) {
+      oshi.hardware.GlobalMemory mem = windowsHardware.getMemory();
+      memTotalGiB = mem.getTotal() / 1073741824f;
+      memUsedGiB = (mem.getTotal() - mem.getAvailable()) / 1073741824f;
+      return;
+    }
     long total = 0, available = 0;
     for (String line : lines("/proc/meminfo")) {
       if (line.startsWith("MemTotal:")) total = kib(line);

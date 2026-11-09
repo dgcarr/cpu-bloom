@@ -99,6 +99,19 @@ The tray libraries are only recommended, not required: without them you get the 
 
 On other distributions, unpack the release tarball (`cpu-bloom-0.2.0-linux-x86_64.tar.gz`) and run `./install.sh --no-build`, which installs for your user only. To install for everyone instead, run `sudo ./install.sh --no-build --prefix=/usr/local`.
 
+### Windows 64-bit portable build
+
+Run `packaging/build-windows.sh` on Linux with Processing 4, Python 3 and
+`gcc-mingw-w64-x86-64-posix` installed. It creates
+`dist/cpu-bloom-windows-x64.zip` with a native x64 launcher and a checksum-verified
+Windows x64 Java runtime. Extract the entire ZIP and run `cpu_bloom.exe`.
+
+Windows CPU load, core grouping and RAM readings use OSHI. The theme keys and
+`--overlay` option work through the same application code. CPU temperature,
+Unix load average, the Linux tray menu and login integration are unavailable.
+Settings are stored under `%APPDATA%\CPU Bloom`. The Windows build is unsigned;
+it has been cross-compiled but still needs runtime verification on Windows.
+
 ### Install from source
 
 You need Processing 4 (tested with 4.5.7) in `/opt/processing` or at `$PROCESSING`.

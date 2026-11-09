@@ -13,6 +13,10 @@ int lastSettingsCheck = -250;
 
 // The per-user config directory, as GLib.get_user_config_dir() finds it in tray.js.
 File configDir() {
+  if (System.getProperty("os.name").startsWith("Windows")) {
+    String appdata = System.getenv("APPDATA");
+    return new File(appdata != null ? appdata : System.getProperty("user.home"), "CPU Bloom");
+  }
   String xdg = System.getenv("XDG_CONFIG_HOME");
   File base = xdg != null && xdg.startsWith("/") ? new File(xdg) : new File(System.getProperty("user.home"), ".config");
   return new File(base, "cpu-bloom");
