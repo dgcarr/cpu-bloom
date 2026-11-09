@@ -25,8 +25,13 @@ in %APPDATA%\CPU Bloom\window.properties. Saved sizes are capped to fit the
 current desktop when reopening. Overlay geometry is stored separately.
 
 CPU load, physical core grouping and RAM use are sampled through OSHI.
-NVIDIA metrics require nvidia-smi on PATH. CPU temperature and Unix load
-average are unavailable. This build is unsigned.
+GPU activity uses Windows performance counters (AMD/Intel/NVIDIA with supported
+drivers), reporting the busiest engine across adapters. If native counter setup
+fails, nvidia-smi is attempted as a fallback. Temperature and GPU memory are not
+reported by the Windows counter provider. CPU temperature and Unix load average
+are unavailable. This build is unsigned.
+Rendering, frame decoding and GPU collection pause when minimized; CPU/RAM
+sampling slows to once every two seconds and wakes immediately on restore.
 
 Third-party software: Processing (LGPL-2.1), JOGL/GlueGen (BSD-style),
 JNA/JNA Platform (Apache-2.0 or LGPL-2.1), OSHI and SLF4J (MIT),

@@ -136,8 +136,11 @@ void drawHud() {
   lines.add(String.format("RAM   %.1f / %.1f GiB", sampler.memUsedGiB, sampler.memTotalGiB));
   colors.add(color(210, 25, 100, 95));
   if (sampler.gpuSeen) {
-    lines.add(String.format("GPU   %.0f%% · %.0f°C · %.1f / %.1f GiB", sampler.gpuUtil, sampler.gpuTempC,
-                            sampler.gpuMemUsedGiB, sampler.gpuMemTotalGiB));
+    String gpuLine = String.format("%s   %.0f%%", sampler.gpuLabel, sampler.gpuUtil);
+    if (Float.isFinite(sampler.gpuTempC)) gpuLine += String.format(" · %.0f°C", sampler.gpuTempC);
+    if (Float.isFinite(sampler.gpuMemUsedGiB) && Float.isFinite(sampler.gpuMemTotalGiB))
+      gpuLine += String.format(" · %.1f / %.1f GiB", sampler.gpuMemUsedGiB, sampler.gpuMemTotalGiB);
+    lines.add(gpuLine);
     colors.add(color(95, 60, 95, 95));
   }
   String legend = theme.legend();

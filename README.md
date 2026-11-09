@@ -102,7 +102,7 @@ On other distributions, unpack the release tarball (`cpu-bloom-0.2.0-linux-x86_6
 ### Windows 64-bit portable build
 
 The repository includes a ready-to-run [Windows x64 bundle](CPU-Bloom-Windows/),
-with the application from the 0.3.3 build, Java runtime, libraries and all four
+with the application from the 0.3.4 build, Java runtime, libraries and all four
 themes. After cloning or downloading and extracting the repository, open
 `CPU-Bloom-Windows` and double-click `cpu_bloom.exe`. Keep the entire folder
 together; the EXE alone is not the application. No separate Java installation is
@@ -139,8 +139,10 @@ Restoring the window wakes sampling immediately. Windows minimize detection also
 works without a tray icon. The window and graphics caches remain in memory for
 quick restoration; a visible window still renders even if another window covers it.
 Rendering supports compatible AMD/Intel/NVIDIA OpenGL drivers. The optional GPU
-metrics currently require NVIDIA tooling; [Windows GPU counter investigation](packaging/msix/GPU-INVESTIGATION.md)
-records the verified AMD alternative and remaining integration work.
+metrics use a vendor-independent Windows GPU activity provider; see
+[Windows GPU counter implementation](packaging/msix/GPU-INVESTIGATION.md) for its
+scope and validation. It reports utilization, with temperature and memory omitted
+when unavailable.
 
 ### Microsoft Store / MSIX
 

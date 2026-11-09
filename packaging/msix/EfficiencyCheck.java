@@ -13,11 +13,13 @@ public class EfficiencyCheck {
     static void idle(cpu_bloom app, String label) throws Exception {
         Thread.sleep(1200); // allow in-flight draw/sample to finish
         long frames=app.renderActivity.frames, samples=app.sampler.sampleCycles;
+        long gpuSamples=app.sampler.gpuSamples;
         long cpu=ProcessHandle.current().info().totalCpuDuration().orElseThrow().toNanos();
         Thread.sleep(4200);
         long draws=app.renderActivity.frames-frames, polls=app.sampler.sampleCycles-samples;
         double cpuMs=(ProcessHandle.current().info().totalCpuDuration().orElseThrow().toNanos()-cpu)/1e6;
         if(draws!=0 || polls<1 || polls>3) throw new AssertionError(label+": frames="+draws+", samples="+polls);
+        if(app.sampler.gpuSamples!=gpuSamples) throw new AssertionError("GPU collection continued while hidden");
         System.out.println("PASS: "+label+", zero frames; samples="+polls+"; process CPU ms over 4.2s="+cpuMs);
     }
     public static void main(String[] args) throws Exception {
@@ -25,6 +27,8 @@ public class EfficiencyCheck {
         try {
             PApplet.runSketch(new String[]{"cpu_bloom"},app);
             await(()->app.renderActivity!=null && app.renderActivity.frames>5 && app.desktopTray!=null);
+            await(()->app.sampler.gpuSeen && app.sampler.gpuSamples>0);
+            System.out.println("PASS: Windows GPU activity available: "+app.sampler.gpuUtil);
             app.minimizeDesktopToTray();
             await(()->!app.newtWindow().isVisible());
             idle(app,"tray hidden");
@@ -44,6 +48,7 @@ public class EfficiencyCheck {
             User32.INSTANCE.ShowWindow(hwnd,9);
             await(()->app.renderActivity.frames>before+5 && app.sampler.sampleCycles>samples);
             app.desktopTray=tray;
+            await(()->app.sampler.gpuSeen);
             System.out.println("PASS: restore resumes rendering and sampling");
             app.exit();
         } catch(Throwable e) { e.printStackTrace(); app.removeDesktopTray(); System.exit(1); }

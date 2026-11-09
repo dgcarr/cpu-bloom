@@ -1,5 +1,19 @@
 # Local validation: 0.3.2
 
+## 0.3.4 Windows GPU activity update
+
+Installed and tested on 9 November 2026 on the same AMD Radeon 840M host.
+Package SHA-256: `8F0362215CFC5E4CE6EA335E13312C0ECF991AEAE4438175DAEA87A9B29C6CE3`.
+Package-content and native-helper checks passed. The installed-package
+`EfficiencyCheck` exited 0 and verified live Windows GPU activity, zero GPU
+collections and zero rendered frames while hidden in the tray or natively
+minimized with tray handling disabled, and resumed activity on restoration.
+Both hidden intervals recorded two metric samples over 4.2 seconds.
+
+The portable application JAR and exported source were refreshed from this build.
+Intel/NVIDIA hardware, localized Windows and multiple adapters remain untested.
+WACK was not rerun; the 0.3.2 certification findings below remain unresolved.
+
 ## 0.3.3 efficiency update
 
 Rebuilt and installed locally on 9 November 2026. Package-content and native-helper

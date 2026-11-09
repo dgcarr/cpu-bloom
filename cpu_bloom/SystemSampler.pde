@@ -1,6 +1,6 @@
 // Reads CPU, memory, temperature and GPU stats on a background thread.
 // Linux uses /proc and /sys; Windows uses OSHI for CPU topology/load and RAM.
-// GPU numbers come from nvidia-smi when it is installed.
+// Windows GPU activity uses PDH; nvidia-smi remains the fallback/Unix provider.
 
 class SystemSampler implements Runnable {
   final int cpuCount;
@@ -14,7 +14,9 @@ class SystemSampler implements Runnable {
   volatile String loadAvg = "";
   volatile float tempC = Float.NaN;
   volatile boolean gpuSeen = false;
-  volatile float gpuUtil, gpuTempC, gpuMemUsedGiB, gpuMemTotalGiB;
+  volatile float gpuUtil, gpuTempC = Float.NaN, gpuMemUsedGiB = Float.NaN, gpuMemTotalGiB = Float.NaN;
+  volatile String gpuLabel = "GPU";
+  volatile long gpuSamples = 0;
 
   private final long[] prevIdle, prevTotal;
   private final String tempPath;
@@ -263,6 +265,7 @@ class SystemSampler implements Runnable {
   // One long-lived query while visible. Blocking reads happen on their own
   // thread; the 200 ms sampler enforces a six-second output timeout.
   void readGpu() {
+    if (windowsHardware != null && readWindowsGpu()) return;
     while (running) {
       Process p = null;
       int epoch = gpuEpoch;
@@ -303,6 +306,46 @@ class SystemSampler implements Runnable {
         if (p != null) p.destroyForcibly();
         gpuProcess = null;
       }
+    }
+  }
+
+  // Own and close the PDH query on this thread. Hidden windows do no collection;
+  // reopening on restore primes fresh deltas rather than averaging hidden time.
+  boolean readWindowsGpu() {
+    WindowsGpuCounters counters = null;
+    try {
+      while (running) {
+        synchronized (gpuWake) {
+          while (running && !gpuActive) {
+            if (counters != null) { counters.close(); counters = null; }
+            gpuSeen = false;
+            gpuWake.wait();
+          }
+        }
+        if (!running) break;
+        if (counters == null) counters = new WindowsGpuCounters();
+        int epoch = gpuEpoch;
+        synchronized (gpuWake) {
+          if (running && gpuActive && epoch == gpuEpoch) gpuWake.wait(2000);
+        }
+        if (!running || !gpuActive || epoch != gpuEpoch) continue;
+        float value = counters.sample();
+        gpuSamples++;
+        gpuLabel = "GPU (busiest engine)";
+        gpuTempC = gpuMemUsedGiB = gpuMemTotalGiB = Float.NaN;
+        if (Float.isFinite(value)) gpuUtil = value;
+        gpuSeen = Float.isFinite(value);
+      }
+      return true;
+    } catch (InterruptedException e) {
+      return true;
+    } catch (RuntimeException | LinkageError e) {
+      println("Windows GPU counters unavailable: " + e.getMessage());
+      gpuSeen = false;
+      gpuLabel = "GPU";
+      return false;
+    } finally {
+      if (counters != null) counters.close();
     }
   }
 
