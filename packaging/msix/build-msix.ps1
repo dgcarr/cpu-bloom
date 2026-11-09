@@ -64,7 +64,10 @@ Copy-Item "$PSScriptRoot/Assets" "$stage/Assets" -Recurse
 Copy-Item "$repo/LICENSE" "$stage/LICENSE.txt"
 Copy-Item "$PSScriptRoot/THIRD-PARTY-NOTICES.md" "$stage/THIRD-PARTY-NOTICES.md"
 Copy-Item "$PSScriptRoot/ASSET-PROVENANCE.md" "$stage/ASSET-PROVENANCE.md"
-Copy-Item "$PSScriptRoot/privacy-policy.draft.md" "$stage/privacy-policy.draft.md"
+Copy-Item "$repo/docs/privacy.html" "$stage/privacy.html"
+Copy-Item "$repo/docs/support.html" "$stage/support.html"
+Copy-Item "$repo/docs/index.html" "$stage/index.html"
+Copy-Item "$repo/docs/site.css" "$stage/site.css"
 $previousInclude = $env:INCLUDE; $previousLib = $env:LIB
 try {
     $env:INCLUDE = "$msvc/include;$sdkInclude/ucrt;$sdkInclude/shared;$sdkInclude/um;$sdkInclude/winrt;$sdkInclude/cppwinrt"

@@ -146,6 +146,9 @@ when unavailable.
 
 ### Microsoft Store / MSIX
 
+[Privacy policy](https://dgcarr.github.io/cpu-bloom/privacy.html) ·
+[Support](https://dgcarr.github.io/cpu-bloom/support.html)
+
 The Windows 11 x64 MSIX build is described in
 [`packaging/msix/README.md`](packaging/msix/README.md). It bundles Java, declares
 an opt-in Windows startup task, isolates settings/cache by package identity, and

@@ -1,4 +1,9 @@
-# CPU Bloom privacy policy — publication draft
+# CPU Bloom privacy policy — superseded draft
+
+The maintained policy is now `docs/privacy.html`, published at
+https://dgcarr.github.io/cpu-bloom/privacy.html . Support is at
+https://dgcarr.github.io/cpu-bloom/support.html . This older draft is retained as
+historical context and is no longer packaged. Edit the HTML policy for updates.
 
 CPU Bloom displays CPU utilization, processor information, memory usage, and optional GPU metrics locally on your Windows computer. It reads these values through Windows interfaces and, when available, NVIDIA's installed command-line utility.
 

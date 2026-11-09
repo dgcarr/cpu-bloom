@@ -60,8 +60,11 @@ remote command channel is opened. OS file locking releases ownership after a cra
 
 ## Release configuration
 
-Copy `store-config.example.json` to a private local config and populate the exact
-Partner Center values and public URLs. Do not fabricate a publisher identity.
+`store-config.json` contains CPU Bloom's assigned Partner Center identity and
+public GitHub Pages privacy/support URLs. It contains no credentials. The remaining
+third-party notice/source review flag intentionally stays false until that review
+is complete. For another publisher, copy `store-config.example.json` and populate
+the exact assigned values. Do not fabricate a publisher identity.
 Review `ASSET-PROVENANCE.md`, `THIRD-PARTY-NOTICES.md`, the extracted notices, and
 `STORE-SUBMISSION.md`, then set the explicit review flags.
 
@@ -90,4 +93,8 @@ Store app's Preferences > Import portable settings. The ZIP is read without
 extracting paths, accepts only the two fixed property entries, limits their size,
 and imports only the allowed preference/geometry keys after confirmation.
 
-Publish and review `privacy-policy.draft.md`; it is not a live privacy-policy URL.
+The maintained public pages are `docs/privacy.html` and `docs/support.html`.
+GitHub Pages publishes `main:/docs`; future commits to that directory update the
+pages. The package includes local copies and their stylesheet. The earlier
+`privacy-policy.draft.md` is superseded. Review the public policy whenever data
+handling changes.

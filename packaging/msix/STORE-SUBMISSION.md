@@ -5,7 +5,7 @@
 - Free Windows 11 x64 desktop utility; English (en-US).
 - Suggested description: CPU Bloom visualizes CPU activity as animated flowers and landscapes. Includes CPU and RAM readings, four themes, a resizable window, system-tray controls, and optional startup at Windows login.
 - Requirements: Windows 11, x64, compatible OpenGL graphics driver. No external Java installation required.
-- Limitations: CPU temperature and Unix load average are unavailable. GPU readings require compatible NVIDIA tooling and are optional. No claim of native ARM64 support.
+- Limitations: CPU temperature and Unix load average are unavailable. Windows GPU activity requires compatible performance counters; NVIDIA tooling is an optional fallback. GPU temperature/memory are not exposed by the current Windows counter provider. No claim of native ARM64 support.
 - Complete IARC questionnaire in Partner Center based on the actual utility; do not predeclare an unissued rating.
 
 ## Capability justification / certification notes
@@ -18,8 +18,8 @@ Startup is off by default, declared in the manifest, and enabled only through Pr
 
 ## Release blockers
 
-- Partner Center account, reserved name and assigned Name/Publisher identity.
-- Publisher display name and public privacy/support URLs; publish the privacy draft after review.
+- Assigned identity and privacy/support URLs are recorded in `store-config.json`.
+- Confirm the publisher account's verification status in Partner Center before submission.
 - Corresponding source/license obligations for redistributed runtime and libraries; review exact bundled notices.
 - Store screenshots captured from the packaged build, final branding review and IARC answers.
 - Clean Windows 11 / Smart App Control-on tests, GPU coverage, actual login tests, update/uninstall tests and private Store flight.
