@@ -1,4 +1,4 @@
-param([Parameter(Mandatory)][string]$Installed, [Parameter(Mandatory)][string]$CheckClasses, [Parameter(Mandatory)][string]$OutputDirectory)
+param([Parameter(Mandatory)][string]$Installed, [Parameter(Mandatory)][string]$CheckClasses, [Parameter(Mandatory)][string]$OutputDirectory, [ValidateSet('InstalledRuntimeCheck','EfficiencyCheck')][string]$TestClass='InstalledRuntimeCheck')
 $ErrorActionPreference='Stop'
 New-Item -ItemType Directory -Force $OutputDirectory | Out-Null
 try {
@@ -12,6 +12,6 @@ try {
     $env:CPU_BLOOM_CACHE_DIR=$context.cache
     $env:CPU_BLOOM_PICTURES=$context.pictures
     $env:CPU_BLOOM_APP_DIR=$Installed
-    $test = Start-Process "$Installed/java/bin/java.exe" -ArgumentList @('-Xmx320m','-cp',"`"$CheckClasses;$Installed/lib/*`"",'InstalledRuntimeCheck') -WindowStyle Hidden -RedirectStandardOutput "$OutputDirectory/installed-runtime.log" -RedirectStandardError "$OutputDirectory/installed-runtime.stderr.log" -Wait -PassThru
+    $test = Start-Process "$Installed/java/bin/java.exe" -ArgumentList @('-Xmx320m','-cp',"`"$CheckClasses;$Installed/lib/*`"",$TestClass) -WindowStyle Hidden -RedirectStandardOutput "$OutputDirectory/installed-runtime.log" -RedirectStandardError "$OutputDirectory/installed-runtime.stderr.log" -Wait -PassThru
     @{ exitCode=$test.ExitCode } | ConvertTo-Json | Set-Content "$OutputDirectory/installed-runtime-state.json"
 } catch { $_ | Out-String | Set-Content "$OutputDirectory/installed-runtime-error.txt" }

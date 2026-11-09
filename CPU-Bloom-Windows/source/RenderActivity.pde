@@ -95,7 +95,7 @@ class RenderActivity implements Runnable {
   }
 
   boolean visible() {
-    if (!window.isVisible()) return false;
+    if (!window.isVisible() || desktopWindowMinimized()) return false;
     if (display == null) return true; // unsupported WMs fail open
     for (long state : property(win, stateAtom)) if (state == hiddenAtom.longValue()) return false;
     long[] wmState = property(win, wmStateAtom);
@@ -128,6 +128,7 @@ class RenderActivity implements Runnable {
         long stamp = settingsFile().lastModified();
         if (stamp != observedSettings) { observedSettings = stamp; requestFrame(); }
         boolean shown = visible();
+        sampler.setBackground(!shown);
         boolean animate = shown && !paused;
         setClockRunning(animate);
         theme.setSuspended(!shown);
@@ -160,6 +161,7 @@ class RenderActivity implements Runnable {
         resumePending = true;
         theme.setSuspended(false);
         sampler.setGpuActive(true);
+        sampler.setBackground(false);
         surface.resumeThread();
       }
     }

@@ -827,10 +827,14 @@ interface DesktopUser32 extends com.sun.jna.win32.StdCallLibrary {
   boolean IsIconic(com.sun.jna.platform.win32.WinDef.HWND hwnd);
 }
 DesktopUser32 desktopUser32;
+public boolean desktopWindowMinimized() {
+  if (!windowsDesktop()) return false;
+  if (desktopUser32 == null) desktopUser32 = Native.load("user32", DesktopUser32.class);
+  return desktopUser32.IsIconic(new com.sun.jna.platform.win32.WinDef.HWND(new Pointer(newtWindow().getWindowHandle())));
+}
 public void pollDesktopMinimize() {
   if (!windowsDesktop() || overlay || desktopTray == null || hiddenInTray || desktopClosing) return;
-  if (desktopUser32 == null) desktopUser32 = Native.load("user32", DesktopUser32.class);
-  if (desktopUser32.IsIconic(new com.sun.jna.platform.win32.WinDef.HWND(new Pointer(newtWindow().getWindowHandle())))) {
+  if (desktopWindowMinimized()) {
     minimizeDesktopToTray();
   }
 }
@@ -1904,7 +1908,7 @@ class RenderActivity implements Runnable {
   }
 
   public boolean visible() {
-    if (!window.isVisible()) return false;
+    if (!window.isVisible() || desktopWindowMinimized()) return false;
     if (display == null) return true; // unsupported WMs fail open
     for (long state : property(win, stateAtom)) if (state == hiddenAtom.longValue()) return false;
     long[] wmState = property(win, wmStateAtom);
@@ -1937,6 +1941,7 @@ class RenderActivity implements Runnable {
         long stamp = settingsFile().lastModified();
         if (stamp != observedSettings) { observedSettings = stamp; requestFrame(); }
         boolean shown = visible();
+        sampler.setBackground(!shown);
         boolean animate = shown && !paused;
         setClockRunning(animate);
         theme.setSuspended(!shown);
@@ -1969,6 +1974,7 @@ class RenderActivity implements Runnable {
         resumePending = true;
         theme.setSuspended(false);
         sampler.setGpuActive(true);
+        sampler.setBackground(false);
         surface.resumeThread();
       }
     }
@@ -2289,6 +2295,19 @@ class SystemSampler implements Runnable {
   private volatile int gpuEpoch = 0;
   private final Object gpuWake = new Object();
   private Thread gpuThread;
+  private final Object sampleWake = new Object();
+  private volatile boolean background = false;
+  private long sampleEpoch = 0;
+  volatile long sampleCycles = 0;
+
+  public void setBackground(boolean value) {
+    synchronized (sampleWake) {
+      if (background == value) return;
+      background = value;
+      sampleEpoch++;
+      sampleWake.notifyAll();
+    }
+  }
 
   // Testing only: CPU_BLOOM_FAKE_LOAD replaces every thread's load with a
   // constant ("0.5") or with seconds:load points from startup, interpolated
@@ -2379,10 +2398,18 @@ class SystemSampler implements Runnable {
     gpuThread.setDaemon(true);
     gpuThread.start();
     long nextMem = 0, nextSlow = 0;
+    long observedEpoch = -1;
     while (running) {
+      long epoch;
+      synchronized (sampleWake) { epoch = sampleEpoch; }
+      if (epoch != observedEpoch) {
+        nextMem = nextSlow = 0;
+        observedEpoch = epoch;
+      }
       long now = System.currentTimeMillis();
       try {
         sampleCpu();
+        sampleCycles++;
         if (now >= nextMem) { sampleMem(); nextMem = now + 500; }
         if (now >= nextSlow) { sampleLoadAndTemp(); nextSlow = now + 1000; }
         Process p = gpuProcess;
@@ -2391,7 +2418,10 @@ class SystemSampler implements Runnable {
         println("sampler: " + e);
       }
       try {
-        Thread.sleep(200);
+        synchronized (sampleWake) {
+          // Restoration wakes this immediately; don't lose a change during sampling.
+          if (running && sampleEpoch == epoch) sampleWake.wait(background ? 2000 : 200);
+        }
       } catch (InterruptedException e) {
         return;
       }
@@ -2496,6 +2526,7 @@ class SystemSampler implements Runnable {
 
   public void close() {
     running = false;
+    synchronized (sampleWake) { sampleWake.notifyAll(); }
     setGpuActive(false);
     if (gpuThread != null) gpuThread.interrupt();
   }

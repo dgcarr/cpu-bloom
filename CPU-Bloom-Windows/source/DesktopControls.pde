@@ -116,10 +116,14 @@ interface DesktopUser32 extends com.sun.jna.win32.StdCallLibrary {
   boolean IsIconic(com.sun.jna.platform.win32.WinDef.HWND hwnd);
 }
 DesktopUser32 desktopUser32;
+boolean desktopWindowMinimized() {
+  if (!windowsDesktop()) return false;
+  if (desktopUser32 == null) desktopUser32 = Native.load("user32", DesktopUser32.class);
+  return desktopUser32.IsIconic(new com.sun.jna.platform.win32.WinDef.HWND(new Pointer(newtWindow().getWindowHandle())));
+}
 void pollDesktopMinimize() {
   if (!windowsDesktop() || overlay || desktopTray == null || hiddenInTray || desktopClosing) return;
-  if (desktopUser32 == null) desktopUser32 = Native.load("user32", DesktopUser32.class);
-  if (desktopUser32.IsIconic(new com.sun.jna.platform.win32.WinDef.HWND(new Pointer(newtWindow().getWindowHandle())))) {
+  if (desktopWindowMinimized()) {
     minimizeDesktopToTray();
   }
 }

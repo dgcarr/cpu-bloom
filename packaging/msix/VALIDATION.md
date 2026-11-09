@@ -1,5 +1,24 @@
 # Local validation: 0.3.2
 
+## 0.3.3 efficiency update
+
+Rebuilt and installed locally on 9 November 2026. Package-content and native-helper
+checks passed. `EfficiencyCheck.java` ran against the installed package and passed:
+
+- Tray hidden: zero frames and two sampling cycles over 4.2 seconds.
+- Native Windows minimize with app tray handling disabled: zero frames and two
+  sampling cycles over 4.2 seconds.
+- Restoring resumed both rendering and metric sampling.
+
+Measured process CPU time during those short hidden intervals was approximately
+109 ms and 281 ms respectively. These are smoke-test observations, not a controlled
+before/after benchmark or a claim of zero CPU usage. The visibility watcher still
+runs five times per second; retained graphics caches are not released on minimize.
+Installed rendering reported AMD Radeon 840M / OpenGL 4.6.
+WACK was not rerun for 0.3.3; the unresolved findings below remain release work.
+
+## 0.3.2 package and certification baseline
+
 Validated on Windows 11 Home build 26300, x64, with AMD Radeon 840M graphics.
 This does not establish compatibility on clean systems or Store acceptance.
 

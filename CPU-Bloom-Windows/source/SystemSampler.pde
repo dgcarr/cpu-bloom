@@ -24,6 +24,19 @@ class SystemSampler implements Runnable {
   private volatile int gpuEpoch = 0;
   private final Object gpuWake = new Object();
   private Thread gpuThread;
+  private final Object sampleWake = new Object();
+  private volatile boolean background = false;
+  private long sampleEpoch = 0;
+  volatile long sampleCycles = 0;
+
+  void setBackground(boolean value) {
+    synchronized (sampleWake) {
+      if (background == value) return;
+      background = value;
+      sampleEpoch++;
+      sampleWake.notifyAll();
+    }
+  }
 
   // Testing only: CPU_BLOOM_FAKE_LOAD replaces every thread's load with a
   // constant ("0.5") or with seconds:load points from startup, interpolated
@@ -114,10 +127,18 @@ class SystemSampler implements Runnable {
     gpuThread.setDaemon(true);
     gpuThread.start();
     long nextMem = 0, nextSlow = 0;
+    long observedEpoch = -1;
     while (running) {
+      long epoch;
+      synchronized (sampleWake) { epoch = sampleEpoch; }
+      if (epoch != observedEpoch) {
+        nextMem = nextSlow = 0;
+        observedEpoch = epoch;
+      }
       long now = System.currentTimeMillis();
       try {
         sampleCpu();
+        sampleCycles++;
         if (now >= nextMem) { sampleMem(); nextMem = now + 500; }
         if (now >= nextSlow) { sampleLoadAndTemp(); nextSlow = now + 1000; }
         Process p = gpuProcess;
@@ -126,7 +147,10 @@ class SystemSampler implements Runnable {
         println("sampler: " + e);
       }
       try {
-        Thread.sleep(200);
+        synchronized (sampleWake) {
+          // Restoration wakes this immediately; don't lose a change during sampling.
+          if (running && sampleEpoch == epoch) sampleWake.wait(background ? 2000 : 200);
+        }
       } catch (InterruptedException e) {
         return;
       }
@@ -231,6 +255,7 @@ class SystemSampler implements Runnable {
 
   void close() {
     running = false;
+    synchronized (sampleWake) { sampleWake.notifyAll(); }
     setGpuActive(false);
     if (gpuThread != null) gpuThread.interrupt();
   }
