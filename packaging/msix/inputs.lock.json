@@ -1,0 +1,15 @@
+{
+  "processingVersion": "4.5.7",
+  "processingTreeSha256": "5b124c652728f520e8c77ccd9e05ca0153b42ac66e1ed5cf67341efa04893857",
+  "windowsSdk": "10.0.26100.0",
+  "msvc": "14.44.35207",
+  "jreSha256": "fe4656bd78fb09812dc38c49da777f79cc33e7ee435a254be82f9e7f40d9d117",
+  "jreUrl": "https://github.com/adoptium/temurin17-binaries/releases/download/jdk-17.0.21%2B9/OpenJDK17U-jre_x64_windows_hotspot_17.0.21_9.zip",
+  "sourceLibraries": {
+    "jna-5.19.1.jar": "4fb141dd8ef6b0585ffceea4bc49602fbc6312fa977e2c488794ea3e6aafecae",
+    "jna-platform-5.19.1.jar": "3b3864f5b449e9c3c24b16861524b622b086563f44e0cd8384c8efc5a6052f82",
+    "oshi-core-6.9.3.jar": "2256b41314316f0fd7500317757606afba41048f21109b4e567d34772845cf98",
+    "slf4j-api-2.0.17.jar": "7b751d952061954d5abfed7181c1f645d336091b679891591d63329c622eb832",
+    "slf4j-nop-2.0.17.jar": "3716f83649ec66161a2edefd4f49df34d1dd1c51cdcf941996c6987260f0a829"
+  }
+}

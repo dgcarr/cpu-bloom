@@ -76,12 +76,13 @@ void configureOverlayWindow() {
 }
 
 void mousePressed() {
+  if (!overlay) { desktopMousePressed(); return; }
   dragX = mouseX;
   dragY = mouseY;
 }
 
 void mouseDragged() {
-  if (!overlay) return;
+  if (!overlay) { desktopMouseDragged(); return; }
   final com.jogamp.newt.Window w = newtWindow();
   // The window moves under the pointer, so the grab offset stays constant.
   final int dx = mouseX - dragX, dy = mouseY - dragY;
@@ -89,6 +90,7 @@ void mouseDragged() {
 }
 
 void mouseReleased() {
+  resizingNormal = false;
   if (overlay) windowOps.submit(() -> saveOverlayGeometry());
 }
 

@@ -65,6 +65,7 @@ File frameCacheFile(File source, int size) {
     String xdg = System.getenv("XDG_CACHE_HOME");
     File root = xdg != null && xdg.startsWith("/") ? new File(xdg)
       : new File(System.getProperty("user.home"), ".cache");
+    if (isStorePackage()) root = packageDirectory("CPU_BLOOM_CACHE_DIR");
     byte[] hash = java.security.MessageDigest.getInstance("SHA-256")
       .digest(source.getCanonicalPath().getBytes(java.nio.charset.StandardCharsets.UTF_8));
     StringBuilder name = new StringBuilder();
@@ -79,7 +80,11 @@ void trimFrameDiskCache(File directory) {
   long total = 0;
   for (File file : files) total += file.length();
   if (total <= FRAME_DISK_BYTES) return;
-  Arrays.sort(files, (a, b) -> Long.compare(a.lastModified(), b.lastModified()));
+  // Readers touch files concurrently. Snapshot timestamps before sorting so
+  // comparator results cannot change midway through TimSort.
+  HashMap<File, Long> timestamps = new HashMap<File, Long>();
+  for (File file : files) timestamps.put(file, file.lastModified());
+  Arrays.sort(files, (a, b) -> Long.compare(timestamps.get(a), timestamps.get(b)));
   for (File file : files) {
     long length = file.length();
     if (file.delete()) total -= length;

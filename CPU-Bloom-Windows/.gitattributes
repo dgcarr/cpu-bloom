@@ -1,0 +1,2 @@
+# Preserve the shipped bundle byte-for-byte, including runtime configuration/notices.
+* -text

@@ -123,6 +123,8 @@ class RenderActivity implements Runnable {
         }
       }
       while (running && window.isNativeValid()) {
+        pollNormalActivation();
+        pollDesktopMinimize();
         long stamp = settingsFile().lastModified();
         if (stamp != observedSettings) { observedSettings = stamp; requestFrame(); }
         boolean shown = visible();

@@ -13,6 +13,7 @@ int lastSettingsCheck = -250;
 
 // The per-user config directory, as GLib.get_user_config_dir() finds it in tray.js.
 File configDir() {
+  if (isStorePackage()) return packageDirectory("CPU_BLOOM_CONFIG_DIR");
   if (System.getProperty("os.name").startsWith("Windows")) {
     String appdata = System.getenv("APPDATA");
     return new File(appdata != null ? appdata : System.getProperty("user.home"), "CPU Bloom");

@@ -3,7 +3,7 @@
 // overlay), draws the HUD and hands the rest of each frame to the active
 // Theme. Themes live in their own tabs; see Theme.pde and THEMES.md.
 //
-// Arguments: --overlay, --theme=<id>, --list-themes.
+// Arguments: --overlay, --theme=<id>, --list-themes, --start-minimized.
 
 import java.io.*;
 import java.nio.file.*;
@@ -41,11 +41,14 @@ void settings() {
   }
 
   overlay = argList.contains("--overlay");
+  if (!acquireNormalInstance(argList.contains("--start-minimized"))) { System.exit(0); return; }
   if (overlay) {
     loadOverlayGeometry();
     size(overlaySize, overlaySize, P2D);
   } else {
-    size(1280, 820, P2D);
+    loadNormalGeometry();
+    size(normalWidth, normalHeight, P2D);
+    pixelDensity(1); // Keep NEWT window units aligned with desktop work-area units.
   }
   smooth(4);
 }
@@ -74,10 +77,13 @@ void draw() {
   if (frameCount == 2) {  // the native window exists by now
     setWindowClass();
     if (overlay) configureOverlayWindow();
+    else configureNormalWindow();
+    if (!overlay) initializeDesktopControls();
     renderActivity = new RenderActivity();
     renderActivity.start();
   }
   if (renderActivity != null) renderActivity.beforeFrame();
+  runDesktopActions();
   syncSettings();
 
   pushStyle();
@@ -86,6 +92,7 @@ void draw() {
   blendMode(BLEND);
   popStyle();
   if (showHud) drawHud();
+  if (!overlay) drawDesktopControls();
   if (renderActivity != null) renderActivity.afterFrame();
 
   if (recordDir != null && millis() >= nextRecordAt) {
@@ -123,7 +130,8 @@ void drawHud() {
   ArrayList<Integer> colors = new ArrayList<Integer>();
   lines.add(sampler.cpuModel);
   colors.add(color(0, 0, 100, 92));
-  lines.add(sampler.cpuCount + " threads · " + sampler.coreCount + " cores · load " + sampler.loadAvg);
+  lines.add(sampler.cpuCount + " threads · " + sampler.coreCount + " cores"
+    + (windowsDesktop() ? "" : " · load " + sampler.loadAvg));
   colors.add(color(0, 0, 100, 80));
   lines.add(String.format("RAM   %.1f / %.1f GiB", sampler.memUsedGiB, sampler.memTotalGiB));
   colors.add(color(210, 25, 100, 95));
@@ -168,6 +176,12 @@ void keyPressed() {
   // The overlay takes focus when it opens (often at login, mid-typing), so it
   // ignores keys; Esc still closes it because PApplet handles that itself.
   if (overlay) return;
+  if (key == ESC && desktopMenuOpen) {
+    key = 0;
+    desktopMenuOpen = false;
+    requestAnimationFrame();
+    return;
+  }
   requestAnimationFrame();
   char k = Character.toLowerCase(key);
   switch (k) {
@@ -178,11 +192,9 @@ void keyPressed() {
     case 's':
       // ~/Pictures rather than the sketch folder, which is read-only-ish once installed.
       // In a snap, HOME is the snap's private one; SNAP_REAL_HOME is the user's.
-      String home = System.getenv("SNAP_REAL_HOME");
-      if (home == null) home = System.getProperty("user.home");
-      String file = home + "/Pictures/CPU Bloom/cpu-bloom-"
+      String file = new File(screenshotsDirectory(), "cpu-bloom-"
                     + nf(year(), 4) + nf(month(), 2) + nf(day(), 2) + "-"
-                    + nf(hour(), 2) + nf(minute(), 2) + nf(second(), 2) + ".png";
+                    + nf(hour(), 2) + nf(minute(), 2) + nf(second(), 2) + ".png").getAbsolutePath();
       save(file);
       println("saved " + file);
       break;
@@ -198,6 +210,8 @@ void requestAnimationFrame() {
 }
 
 public void dispose() {
+  releaseNormalInstance();
+  removeDesktopTray();
   if (renderActivity != null) renderActivity.close();
   if (sampler != null) sampler.close();
   if (theme != null) theme.stop();

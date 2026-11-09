@@ -1,6 +1,6 @@
 # CPU Bloom
 
-A live system monitor for Linux, written in [Processing](https://processing.org), that draws your CPU as a glowing flower. Other looks are available as themes, and you can write your own in Processing.
+A live system monitor for Linux and Windows, written in [Processing](https://processing.org), that draws your CPU as a glowing flower. Other looks are available as themes, and you can write your own in Processing.
 
 [![Get it from the Snap Store](https://snapcraft.io/static/images/badges/en/snap-store-black.svg)](https://snapcraft.io/cpu-bloom)
 
@@ -101,6 +101,23 @@ On other distributions, unpack the release tarball (`cpu-bloom-0.2.0-linux-x86_6
 
 ### Windows 64-bit portable build
 
+The repository includes a ready-to-run [Windows x64 bundle](CPU-Bloom-Windows/),
+with the application from the 0.3.2 build, Java runtime, libraries and all four
+themes. After cloning or downloading and extracting the repository, open
+`CPU-Bloom-Windows` and double-click `cpu_bloom.exe`. Keep the entire folder
+together; the EXE alone is not the application. No separate Java installation is
+needed. From PowerShell at the repository root:
+
+```powershell
+.\CPU-Bloom-Windows\cpu_bloom.exe
+# Optional: launch directly into the system tray
+.\CPU-Bloom-Windows\cpu_bloom.exe --start-minimized
+```
+
+This bundle was tested on Windows 11 x64 and requires an OpenGL-capable graphics
+driver. It is unsigned; it is not a Microsoft Store release and these instructions
+do not require disabling Windows security protections.
+
 Run `packaging/build-windows.sh` on Linux with Processing 4, Python 3 and
 `gcc-mingw-w64-x86-64-posix` installed. It creates
 `dist/cpu-bloom-windows-x64.zip` with a native x64 launcher and a checksum-verified
@@ -108,9 +125,28 @@ Windows x64 Java runtime. Extract the entire ZIP and run `cpu_bloom.exe`.
 
 Windows CPU load, core grouping and RAM readings use OSHI. The theme keys and
 `--overlay` option work through the same application code. CPU temperature,
-Unix load average, the Linux tray menu and login integration are unavailable.
-Settings are stored under `%APPDATA%\CPU Bloom`. The Windows build is unsigned;
-it has been cross-compiled but still needs runtime verification on Windows.
+and Unix load average are unavailable. The normal window has a top-right Menu
+for themes, Preferences and minimizing to the Windows system tray. Drag the
+bottom-right grip to resize; the size is remembered. Double-click the tray icon
+to restore, or right-click for its menu. Preferences includes an optional
+**Start with Windows** checkbox (off by default), which manages a shortcut in
+your personal Startup folder. Retick it after moving the portable folder.
+Settings are stored under `%APPDATA%\CPU Bloom`. The Windows build is unsigned.
+
+### Microsoft Store / MSIX
+
+The Windows 11 x64 MSIX build is described in
+[`packaging/msix/README.md`](packaging/msix/README.md). It bundles Java, declares
+an opt-in Windows startup task, isolates settings/cache by package identity, and
+supports restoring an existing tray instance on a second launch. Portable
+preferences can be exported/imported explicitly without copying startup consent.
+Local test packages are clearly marked and are not Store submissions. Store
+release builds require your assigned Partner Center identity, published privacy
+and support URLs, and completed rights/license review.
+The 0.3.2 local package completed WACK with an overall **WARNING**, including an
+optional blocked-executables test failure and a DPI-awareness warning; see the
+[validation record](packaging/msix/VALIDATION.md). Generated MSIX files and build
+logs remain under ignored `dist/`; the committed runnable bundle above is portable.
 
 ### Install from source
 
