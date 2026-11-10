@@ -1,0 +1,121 @@
+{
+  "template": "/home/dgcarr/cpu-bloom/SPT_x.inp",
+  "template_sha256": "d09624276f573933d5e4380e97048008a82d4d8442ef3fc0bd027e3906ea239a",
+  "group_summary": "/home/dgcarr/SmallPunch/analysis_output/Zr4_Interactive/runs/20261108T221214_4f51a13b/group_summary.csv",
+  "group_summary_sha256": "d04b8ae6eaceb681edd64bcb153af4e6208679e6f42f404ff3671fed9f21f748",
+  "sample_section_line": 42551,
+  "step_boundary_line": 54718,
+  "files": [
+    {
+      "file": "SPT_1.inp",
+      "material": "JC_Zr4_1_00e00L",
+      "orientation": "L",
+      "fluence_n_cm2": 0.0,
+      "mean_fracture_displacement_mm": 0.7522438737238558,
+      "step_U2_mm": -0.7522438737238558,
+      "specimens": [
+        "T18183",
+        "T18184",
+        "T18186"
+      ],
+      "sha256": "3bf0db6a746469fcf556fdf3d72919b0745e5c2ff13bd8ce93d7c389e08e0df2"
+    },
+    {
+      "file": "SPT_2.inp",
+      "material": "JC_Zr4_2_00e00T",
+      "orientation": "T",
+      "fluence_n_cm2": 0.0,
+      "mean_fracture_displacement_mm": 0.8504757693012666,
+      "step_U2_mm": -0.8504757693012666,
+      "specimens": [
+        "T18187",
+        "T18188",
+        "T18189"
+      ],
+      "sha256": "6ad4d8a2737adf0b507112e46ebf845232116063cc856ae9420eb9ea4964162c"
+    },
+    {
+      "file": "SPT_3.inp",
+      "material": "JC_Zr4_3_5_77e20L",
+      "orientation": "L",
+      "fluence_n_cm2": 5.77e+20,
+      "mean_fracture_displacement_mm": 0.5431757323026516,
+      "step_U2_mm": -0.5431757323026516,
+      "specimens": [
+        "T13561",
+        "T13562"
+      ],
+      "sha256": "42dea6720c20dcd94150097b24f9d1d881b2aa159d0a913c4288848372e9b3be"
+    },
+    {
+      "file": "SPT_4.inp",
+      "material": "JC_Zr4_4_5_77e20T",
+      "orientation": "T",
+      "fluence_n_cm2": 5.77e+20,
+      "mean_fracture_displacement_mm": 0.6027690687274757,
+      "step_U2_mm": -0.6027690687274757,
+      "specimens": [
+        "T13573",
+        "T13574",
+        "T13575"
+      ],
+      "sha256": "29688eca24adeb9948569daac68fe94b53333a2592d2fd6edad28eb45d3762d7"
+    },
+    {
+      "file": "SPT_5.inp",
+      "material": "JC_Zr4_5_1_23e21L",
+      "orientation": "L",
+      "fluence_n_cm2": 1.23e+21,
+      "mean_fracture_displacement_mm": 0.6693817669914682,
+      "step_U2_mm": -0.6693817669914682,
+      "specimens": [
+        "T13567",
+        "T13568",
+        "T13569"
+      ],
+      "sha256": "1b9e403467a8884f51cfb2a9afb2f013ca3878da42c171d829eab39ac65451d3"
+    },
+    {
+      "file": "SPT_6.inp",
+      "material": "JC_Zr4_6_1_23e21T",
+      "orientation": "T",
+      "fluence_n_cm2": 1.23e+21,
+      "mean_fracture_displacement_mm": 0.7355863865223219,
+      "step_U2_mm": -0.7355863865223219,
+      "specimens": [
+        "T13579",
+        "T13580",
+        "T13581"
+      ],
+      "sha256": "e25fdb35f56b87094125081802aec976446085d70a84b328dd50872adbdf1367"
+    },
+    {
+      "file": "SPT_7.inp",
+      "material": "JC_Zr4_7_1_86e21S",
+      "orientation": "S",
+      "fluence_n_cm2": 1.86e+21,
+      "mean_fracture_displacement_mm": 0.7136053094338015,
+      "step_U2_mm": -0.7136053094338015,
+      "specimens": [
+        "T13585",
+        "T13586",
+        "T13587"
+      ],
+      "sha256": "41435d6f3afc003129839b178375a854d2611e5a7c2e8c7e6cbc17ac6e8e28f9"
+    },
+    {
+      "file": "SPT_8.inp",
+      "material": "JC_Zr4_8_3_97e21S",
+      "orientation": "S",
+      "fluence_n_cm2": 3.97e+21,
+      "mean_fracture_displacement_mm": 0.7350821189678811,
+      "step_U2_mm": -0.7350821189678811,
+      "specimens": [
+        "T13591",
+        "T13592",
+        "T13593"
+      ],
+      "sha256": "e16f03a4d7b240ce7a2339d92db8f9ee76a6a10345783b62ab81c02eef46592d"
+    }
+  ]
+}
